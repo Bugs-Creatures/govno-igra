@@ -10,11 +10,13 @@ namespace UntilSix.Monster
         {
             SelectTarget,
             Approach,
-            WindUp
+            WindUp,
+            PursuePlayer
         }
 
         [SerializeField] private MonsterMovement movement;
         [SerializeField] private MonsterLampTarget[] lamps;
+        [SerializeField] private PlayerLightZones player;
         [SerializeField, Min(0f)] private float startDelaySeconds;
         [SerializeField, Min(0f)] private float breakIntervalSeconds;
         [SerializeField, Min(0f)] private float windUpSeconds = 0.5f;
@@ -30,6 +32,7 @@ namespace UntilSix.Monster
         private MonsterLampTarget lastBrokenLamp;
 
         public MonsterLampTarget CurrentTarget { get; private set; }
+        public bool IsPursuingPlayer => phase == Phase.PursuePlayer;
 
         private void OnEnable()
         {
@@ -48,9 +51,25 @@ namespace UntilSix.Monster
             if (movement == null || !movement.isActiveAndEnabled)
                 return;
 
+            if (player != null && player.isActiveAndEnabled && !player.IsInLight)
+            {
+                if (!IsPursuingPlayer)
+                {
+                    movement.Stop();
+                    CurrentTarget = null;
+                    phase = Phase.PursuePlayer;
+                }
+
+                movement.ChaseTowards(player.transform.position, Time.deltaTime);
+                return;
+            }
+
+            if (IsPursuingPlayer)
+                ResetTarget(0f);
+
             if (phase == Phase.SelectTarget)
             {
-                if (Time.time >= nextSelectionAt && Time.time >= nextBreakAt)
+                if (Time.time >= nextSelectionAt)
                     SelectTarget();
                 return;
             }
@@ -67,7 +86,7 @@ namespace UntilSix.Monster
                 {
                     case MoveResult.Arrived:
                         movement.Stop();
-                        strikeAt = Time.time + windUpSeconds;
+                        strikeAt = Mathf.Max(Time.time + windUpSeconds, nextBreakAt);
                         phase = Phase.WindUp;
                         break;
                     case MoveResult.Unreachable:
