@@ -34,6 +34,16 @@ public sealed class CeilingLamp : MonoBehaviour
         return true;
     }
 
+    public bool TryBreak()
+    {
+        if (isBroken)
+            return false;
+
+        isBroken = true;
+        ApplyState();
+        return true;
+    }
+
     public void SetOutline(Material material)
     {
         if (outlineRenderers == null)
