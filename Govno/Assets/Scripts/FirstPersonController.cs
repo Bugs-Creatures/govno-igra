@@ -6,16 +6,26 @@ public sealed class FirstPersonController : MonoBehaviour
 {
     [SerializeField] private Camera viewCamera;
     [SerializeField] private InputActionAsset inputActions;
-    [SerializeField, Min(0f)] private float walkSpeed = 4f;
-    [SerializeField, Min(0f)] private float sprintSpeed = 7f;
-    [SerializeField, Min(0f)] private float crouchSpeed = 2f;
+    [SerializeField, Min(0f)] private float walkSpeed = 2.4444445f;
+    [SerializeField, Min(0f)] private float sprintSpeed = 4.0444444f;
+    [SerializeField, Min(0f)] private float crouchSpeed = 1.2222223f;
     [SerializeField, Min(0.1f)] private float crouchHeight = 1.15f;
     [SerializeField, Min(0f)] private float jumpHeight = 1.2f;
     [SerializeField, Min(0f)] private float mouseSensitivity = 0.12f;
 
+    [Header("Movement Audio")]
+    [SerializeField] private AudioSource movementAudioSource;
+    [SerializeField] private AudioClip[] footstepClips;
+    [SerializeField] private AudioClip[] creakyFootstepClips;
+    [SerializeField, Range(0f, 1f), Tooltip("Chance of a creaky step after a clean step.")]
+    private float creakyFootstepChance = 0.25f;
+    [SerializeField, Min(0.05f), Tooltip("Seconds between steps at normal walking speed.")]
+    private float footstepInterval = 0.6f;
+
     private const float Gravity = 20f;
     private const float GroundingSpeed = 2f;
     private const float PitchLimit = 85f;
+    private const float StairContactGrace = 0.25f;
 
     private CharacterController controller;
     private InputActionMap playerActions;
@@ -31,6 +41,10 @@ public sealed class FirstPersonController : MonoBehaviour
     private float pitch;
     private float verticalSpeed;
     private bool crouched;
+    private float timeSinceGrounded = float.PositiveInfinity;
+    private float distanceSinceFootstep;
+    private int previousFootstep = -1;
+    private bool previousFootstepWasCreaky;
 
     public bool HasGameplayInput { get; private set; }
     public bool IsGrounded => controller.isGrounded;
@@ -71,6 +85,8 @@ public sealed class FirstPersonController : MonoBehaviour
     private void OnDisable()
     {
         HasGameplayInput = false;
+        timeSinceGrounded = float.PositiveInfinity;
+        distanceSinceFootstep = 0f;
         if (playerActions == null)
             return;
 
@@ -111,9 +127,10 @@ public sealed class FirstPersonController : MonoBehaviour
         bool grounded = controller.isGrounded;
         UpdateStance(HasGameplayInput && crouch.IsPressed());
 
+        bool tookOff = grounded && jumping && jumpHeight > 0f;
         if (grounded)
         {
-            if (jumping)
+            if (tookOff)
                 verticalSpeed = Mathf.Sqrt(2f * Gravity * jumpHeight);
             else if (verticalSpeed < 0f)
                 verticalSpeed = -GroundingSpeed;
@@ -132,6 +149,63 @@ public sealed class FirstPersonController : MonoBehaviour
         CollisionFlags collisions = controller.Move(velocity * dt);
         if ((collisions & CollisionFlags.Above) != 0 && verticalSpeed > 0f)
             verticalSpeed = 0f;
+
+        UpdateMovementAudio((collisions & CollisionFlags.Below) != 0, tookOff, movement, dt);
+    }
+
+    private void UpdateMovementAudio(bool grounded, bool tookOff, Vector2 movement, float deltaTime)
+    {
+        if (tookOff)
+        {
+            timeSinceGrounded = float.PositiveInfinity;
+            distanceSinceFootstep = 0f;
+            return;
+        }
+
+        timeSinceGrounded = grounded ? 0f : timeSinceGrounded + deltaTime;
+        if (timeSinceGrounded > StairContactGrace)
+        {
+            distanceSinceFootstep = 0f;
+            return;
+        }
+
+        Vector3 travelVelocity = controller.velocity;
+        travelVelocity.y = 0f;
+        float travelSpeed = travelVelocity.magnitude;
+        if (movement.sqrMagnitude < 0.01f || travelSpeed < 0.1f)
+            return;
+
+        // Keep counting across short gaps between treads, but play only on contact.
+        distanceSinceFootstep += travelSpeed * deltaTime;
+        float stepDistance = Mathf.Max(0.1f, walkSpeed) * Mathf.Max(0.05f, footstepInterval);
+        if (!grounded || distanceSinceFootstep < stepDistance)
+            return;
+
+        distanceSinceFootstep %= stepDistance;
+        PlayFootstep();
+    }
+
+    private void PlayFootstep()
+    {
+        bool hasCleanSteps = footstepClips != null && footstepClips.Length > 0;
+        bool hasCreakySteps = creakyFootstepClips != null && creakyFootstepClips.Length > 0;
+        if (!hasCleanSteps && !hasCreakySteps)
+            return;
+
+        bool useCreakyStep = hasCreakySteps && (!hasCleanSteps ||
+            (!previousFootstepWasCreaky && Random.value < creakyFootstepChance));
+        AudioClip[] clips = useCreakyStep ? creakyFootstepClips : footstepClips;
+        int count = clips.Length;
+        bool excludePrevious = count > 1 && previousFootstepWasCreaky == useCreakyStep &&
+            previousFootstep >= 0 && previousFootstep < count;
+        int index = Random.Range(0, excludePrevious ? count - 1 : count);
+        if (excludePrevious && index >= previousFootstep)
+            index++;
+
+        previousFootstep = index;
+        previousFootstepWasCreaky = useCreakyStep;
+        if (movementAudioSource != null && clips[index] != null)
+            movementAudioSource.PlayOneShot(clips[index]);
     }
 
     private void UpdateStance(bool wantsToCrouch)
