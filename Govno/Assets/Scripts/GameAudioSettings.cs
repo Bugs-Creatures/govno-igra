@@ -33,6 +33,8 @@ public sealed class GameAudioSettings : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float lampHumVolume = 0.3675f;
     [SerializeField, Range(0f, 1f)] private float bulbTurningVolume = 0.5f;
     [SerializeField, Range(0f, 1f)] private float bulbRemovedVolume = 0.9f;
+    [SerializeField] private AudioClip lampBreakSound;
+    [SerializeField, Range(0f, 1f)] private float lampBreakVolume = 0.8f;
 
     [Header("Monster")]
     [SerializeField, Range(0f, 1f)] private float monsterFootstepsVolume = 0.9f;
@@ -81,6 +83,8 @@ public sealed class GameAudioSettings : MonoBehaviour
     public float LampHumVolume => masterVolume * lampHumVolume;
     public float BulbTurningVolume => masterVolume * bulbTurningVolume;
     public float BulbRemovedVolume => masterVolume * bulbRemovedVolume;
+    public AudioClip LampBreakSound => lampBreakSound;
+    public float LampBreakVolume => masterVolume * lampBreakVolume;
     public float MonsterFootstepsVolume => masterVolume * monsterFootstepsVolume;
     public float MonsterDisappearanceVolume => masterVolume * monsterDisappearanceVolume;
     public float PlayerBreathVolume => masterVolume * playerBreathVolume;

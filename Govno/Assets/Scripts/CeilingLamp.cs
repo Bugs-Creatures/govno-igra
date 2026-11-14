@@ -16,6 +16,7 @@ public sealed class CeilingLamp : MonoBehaviour
     private MeshOutline outline;
     private AudioSource repairAudio;
     private AudioSource removalAudio;
+    private AudioSource breakAudio;
     private bool audioStateDirty;
     private bool brokenBulbRemoved;
 
@@ -41,6 +42,8 @@ public sealed class CeilingLamp : MonoBehaviour
             repairAudio.Stop();
         if (removalAudio != null)
             removalAudio.Stop();
+        if (breakAudio != null)
+            breakAudio.Stop();
         ApplyState();
         ApplyAudioState();
     }
@@ -69,7 +72,7 @@ public sealed class CeilingLamp : MonoBehaviour
         if (removedSound != null)
         {
             if (removalAudio == null)
-                removalAudio = CreateRepairAudio();
+                removalAudio = CreateSpatialAudio();
             removalAudio.volume = GameAudioSettings.Current?.BulbRemovedVolume ?? 0.9f;
             removalAudio.PlayOneShot(removedSound);
         }
@@ -97,7 +100,20 @@ public sealed class CeilingLamp : MonoBehaviour
         brokenBulbRemoved = false;
         ApplyState();
         ApplyAudioState();
+        PlayBreakSound();
         return true;
+    }
+
+    private void PlayBreakSound()
+    {
+        GameAudioSettings settings = GameAudioSettings.Current;
+        if (settings == null || settings.LampBreakSound == null)
+            return;
+
+        if (breakAudio == null)
+            breakAudio = CreateSpatialAudio(maxDistance: 12f);
+        breakAudio.volume = settings.LampBreakVolume;
+        breakAudio.PlayOneShot(settings.LampBreakSound);
     }
 
     public void SetOutline(Material material, Material silhouetteMask = null)
@@ -122,7 +138,7 @@ public sealed class CeilingLamp : MonoBehaviour
             return;
 
         if (repairAudio == null)
-            repairAudio = CreateRepairAudio();
+            repairAudio = CreateSpatialAudio();
         repairAudio.volume = GameAudioSettings.Current?.BulbTurningVolume ?? 0.5f;
         repairAudio.clip = turningSound;
         repairAudio.loop = true;
@@ -138,7 +154,7 @@ public sealed class CeilingLamp : MonoBehaviour
         repairAudio.loop = false;
     }
 
-    private AudioSource CreateRepairAudio()
+    private AudioSource CreateSpatialAudio(float maxDistance = 6f)
     {
         AudioSource source = gameObject.AddComponent<AudioSource>();
         source.outputAudioMixerGroup = GameAudioSettings.Current?.AudioOutput;
@@ -147,7 +163,7 @@ public sealed class CeilingLamp : MonoBehaviour
         source.dopplerLevel = 0f;
         source.rolloffMode = AudioRolloffMode.Linear;
         source.minDistance = 1.5f;
-        source.maxDistance = 6f;
+        source.maxDistance = maxDistance;
         return source;
     }
 
@@ -163,6 +179,8 @@ public sealed class CeilingLamp : MonoBehaviour
             repairAudio.volume = settings.BulbTurningVolume;
         if (removalAudio != null && removalAudio.volume != settings.BulbRemovedVolume)
             removalAudio.volume = settings.BulbRemovedVolume;
+        if (breakAudio != null && breakAudio.volume != settings.LampBreakVolume)
+            breakAudio.volume = settings.LampBreakVolume;
     }
 
     private void UpdateLight()
