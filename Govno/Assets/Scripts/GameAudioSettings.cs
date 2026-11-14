@@ -40,6 +40,7 @@ public sealed class GameAudioSettings : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float playerBreathVolume = 1f;
     [SerializeField, Range(0f, 1f)] private float chaseScreamVolume = 1f;
     [SerializeField, Range(0f, 1f)] private float chaseMusicVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float jumpscareVolume = 1f;
 
     [Header("Rain")]
     [SerializeField] private AudioClip rainClip;
@@ -85,6 +86,7 @@ public sealed class GameAudioSettings : MonoBehaviour
     public float MonsterDisappearanceVolume => masterVolume * monsterDisappearanceVolume;
     public float PlayerBreathVolume => masterVolume * playerBreathVolume;
     public float ChaseVolume(bool scream) => masterVolume * (scream ? chaseScreamVolume : chaseMusicVolume);
+    public float JumpscareVolume => masterVolume * jumpscareVolume;
 
     private void OnEnable()
     {

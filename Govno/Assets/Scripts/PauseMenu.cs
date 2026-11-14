@@ -31,7 +31,7 @@ public sealed class PauseMenu : MonoBehaviour
 
     private void Update()
     {
-        if (Keyboard.current?.escapeKey.wasPressedThisFrame != true)
+        if (player.IsCinematicLocked || Keyboard.current?.escapeKey.wasPressedThisFrame != true)
             return;
 
         if (player.IsPaused)

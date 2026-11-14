@@ -33,6 +33,7 @@ namespace UntilSix.Monster
         private int nextPrint;
         private int lastClip = -1;
         private bool hidden;
+        private bool jumpscareVisible;
 
         private Vector3 ZonePosition => transform.position + Vector3.up * 0.25f;
         private bool InLight => lightZones != null && lightZones.IsLitAt(ZonePosition);
@@ -76,6 +77,9 @@ namespace UntilSix.Monster
 
         private void RefreshVisibility()
         {
+            if (jumpscareVisible)
+                return;
+
             if (!InLight)
             {
                 if (hidden)
@@ -97,6 +101,14 @@ namespace UntilSix.Monster
 
             SetHidden(true);
         }
+
+        internal void SetJumpscareVisibility(bool visible)
+        {
+            jumpscareVisible = visible;
+            SetHidden(!visible && InLight);
+        }
+
+        internal bool CanStartJumpscare(Vector3 eye, Vector3 target) => !InLight && HasClearView(eye, target);
 
         private void SetHidden(bool value)
         {
@@ -139,7 +151,11 @@ namespace UntilSix.Monster
                 viewport.x < 0f || viewport.x > 1f || viewport.y < 0f || viewport.y > 1f)
                 return false;
 
-            Vector3 eye = playerCamera.transform.position;
+            return HasClearView(playerCamera.transform.position, position);
+        }
+
+        private bool HasClearView(Vector3 eye, Vector3 position)
+        {
             Vector3 direction = position - eye;
             foreach (RaycastHit hit in Physics.RaycastAll(eye, direction.normalized, direction.magnitude,
                          Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))

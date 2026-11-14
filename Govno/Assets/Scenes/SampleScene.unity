@@ -699,7 +699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d299ff7b2d9bc104bbc6b07727b91918, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UntilSix.Monster.MonsterDoorway
-  door: {fileID: 169083477}
+  door: {fileID: 0}
 --- !u!65 &82562872
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7476,18 +7476,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 30f9854fd25746ce9f44ba1f31b2fd29, type: 3}
   creakyFootstepChance: 0.25
   footstepInterval: 0.6
---- !u!114 &1501000017
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d61e9d144cbe48b7becf74132fdb19f1, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
 --- !u!1 &1501000010
 GameObject:
   m_ObjectHideFlags: 0
@@ -7731,6 +7719,7 @@ MonoBehaviour:
   playerBreathVolume: 1
   chaseScreamVolume: 1
   chaseMusicVolume: 1
+  jumpscareVolume: 1
   rainClip: {fileID: 8300000, guid: a37fd6ec750f456e8c7908176112c002, type: 3}
   rainFirstFloorVolume: 0.032
   rainUpperFloorVolume: 0.047
@@ -7742,6 +7731,18 @@ MonoBehaviour:
   rainListener: {fileID: 330585546}
   rainWindowRoot: {fileID: 64821419}
   rainWindowGlass: {fileID: 2100000, guid: 8b516fa28f032114aaa1213f47e1b05b, type: 2}
+--- !u!114 &1501000017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d61e9d144cbe48b7becf74132fdb19f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1501000020
 GameObject:
   m_ObjectHideFlags: 0
@@ -8689,6 +8690,7 @@ GameObject:
   - component: {fileID: 1730001098}
   - component: {fileID: 1730001100}
   - component: {fileID: 1730001101}
+  - component: {fileID: 1730001102}
   m_Layer: 0
   m_Name: Lamp Hunter
   m_TagString: Untagged
@@ -8751,6 +8753,7 @@ MonoBehaviour:
   chaseMusicSource: {fileID: 344162723}
   chaseScream: {fileID: 0}
   chaseMusic: {fileID: 0}
+  jumpscare: {fileID: 1730001102}
 --- !u!114 &1730001098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8913,6 +8916,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1730001102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730001090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 569e6392d03363f41833255b4de346fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UntilSix.Monster.MonsterJumpscare
+  player: {fileID: 1501000003}
+  neck: {fileID: 1730359107}
+  scream: {fileID: 8300000, guid: d7373c49910c6c04fbb35980e2f22f01, type: 3}
+  recoveryBreath: {fileID: 8300000, guid: 6f4d4265f05936349a35104ca49db28d, type: 3}
+--- !u!4 &1730359107 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -6638109392881180091, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
+  m_PrefabInstance: {fileID: 1605535713}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1732436433
 GameObject:
   m_ObjectHideFlags: 0

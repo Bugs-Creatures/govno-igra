@@ -75,8 +75,8 @@ namespace UntilSix.Monster
             hasDestination = false;
             if (agent != null && agent.isOnNavMesh)
             {
-                agent.isStopped = true;
                 agent.ResetPath();
+                agent.isStopped = true;
             }
         }
 

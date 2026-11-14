@@ -50,6 +50,9 @@ public sealed class FirstPersonController : MonoBehaviour
 
     public bool HasGameplayInput { get; private set; }
     public bool IsPaused { get; private set; }
+    public bool IsCinematicLocked { get; private set; }
+    public Vector3 ViewPosition => view.position;
+    internal Camera ViewCamera => viewCamera;
     public float MouseSensitivity
     {
         get => mouseSensitivity;
@@ -117,9 +120,41 @@ public sealed class FirstPersonController : MonoBehaviour
         SetCursorCaptured(!paused && isActiveAndEnabled);
     }
 
+    public void SetCinematicLocked(bool locked)
+    {
+        IsCinematicLocked = locked;
+        HasGameplayInput = false;
+        verticalSpeed = 0f;
+        landingAfterJump = false;
+        distanceSinceFootstep = 0f;
+        if (!locked)
+            resumeFrame = Time.frameCount;
+    }
+
+    public void TurnCinematicView(Vector3 target, float maxDegrees)
+    {
+        Vector3 direction = target - view.position;
+        if (!IsCinematicLocked || direction.sqrMagnitude < 0.0001f)
+            return;
+
+        Vector3 forward = Quaternion.RotateTowards(view.rotation,
+            Quaternion.LookRotation(direction), maxDegrees) * Vector3.forward;
+        float horizontal = new Vector2(forward.x, forward.z).magnitude;
+        if (horizontal > 0.001f)
+            transform.rotation = Quaternion.Euler(0f, Mathf.Atan2(forward.x, forward.z) * Mathf.Rad2Deg, 0f);
+        pitch = Mathf.Clamp(Mathf.Atan2(-forward.y, horizontal) * Mathf.Rad2Deg, -PitchLimit, PitchLimit);
+        view.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+    }
+
+    public void PlayScaredBreath(AudioClip clip, float volumeScale)
+    {
+        if (clip != null && movementAudioSource != null)
+            movementAudioSource.PlayOneShot(clip, (GameAudioSettings.Current?.PlayerBreathVolume ?? 1f) * volumeScale);
+    }
+
     private void Update()
     {
-        if (IsPaused || Time.frameCount == resumeFrame)
+        if (IsPaused || IsCinematicLocked || Time.frameCount == resumeFrame)
             return;
 
         bool captured = Cursor.lockState == CursorLockMode.Locked;

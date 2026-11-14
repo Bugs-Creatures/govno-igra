@@ -26,6 +26,7 @@ namespace UntilSix.Monster
         [SerializeField] private AudioSource chaseMusicSource;
         [SerializeField] private AudioClip chaseScream;
         [SerializeField] private AudioClip chaseMusic;
+        [SerializeField] private MonsterJumpscare jumpscare;
 
         private readonly List<MonsterLampTarget> candidates = new List<MonsterLampTarget>();
         private readonly Dictionary<MonsterLampTarget, float> retryAfter = new Dictionary<MonsterLampTarget, float>();
@@ -47,12 +48,17 @@ namespace UntilSix.Monster
 
         private void OnDisable()
         {
+            if (jumpscare != null)
+                jumpscare.Cancel();
             ResetTarget(0f);
             retryAfter.Clear();
         }
 
         private void Update()
         {
+            if (jumpscare != null && jumpscare.IsHoldingMonster)
+                return;
+
             if (movement == null || !movement.isActiveAndEnabled)
             {
                 if (IsPursuingPlayer)
@@ -62,6 +68,12 @@ namespace UntilSix.Monster
 
             if (player != null && player.isActiveAndEnabled && !player.IsInLight)
             {
+                if (jumpscare != null && jumpscare.TryBegin(lamps))
+                {
+                    ResetTarget(0f);
+                    return;
+                }
+
                 if (!IsPursuingPlayer)
                 {
                     movement.Stop();
