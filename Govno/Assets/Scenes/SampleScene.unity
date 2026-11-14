@@ -7988,6 +7988,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewCamera: {fileID: 330585545}
   boxHoldPoint: {fileID: 1502000002}
+  recoveryBoxPrefab: {fileID: 88299741316209588, guid: fa16ca1e0bd2d6448a1e4dee01581ef6, type: 3}
   reticle: {fileID: 1501000033}
   repairProgress: {fileID: 1502000006}
   interactionDistance: 3.2

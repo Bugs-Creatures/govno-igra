@@ -25,6 +25,7 @@ namespace UntilSix.Monster
 
         private NavMeshAgent agent;
         private MonsterLightPresentation presentation;
+        private LampInteraction lampInteraction;
         private AudioSource screamSource;
         private CanvasGroup blackout;
         private Coroutine sequence;
@@ -42,6 +43,8 @@ namespace UntilSix.Monster
         {
             agent = GetComponent<NavMeshAgent>();
             presentation = GetComponent<MonsterLightPresentation>();
+            if (player != null)
+                lampInteraction = player.GetComponent<LampInteraction>();
             if (neck != null)
                 head = neck.Find("head");
         }
@@ -66,16 +69,18 @@ namespace UntilSix.Monster
                 transform.rotation = Quaternion.LookRotation(towardsPlayer);
             presentation.SetJumpscareVisibility(true);
             player.SetCinematicLocked(true);
+            BulbBox droppedBox = lampInteraction != null ? lampInteraction.BeginJumpscare() : null;
+            bool needsRecoveryBox = droppedBox == null || !droppedBox.HasBulbs;
             normalFieldOfView = player.ViewCamera.fieldOfView;
             zoomElapsed = 0f;
-            sequence = StartCoroutine(Play(teleportTargets));
+            sequence = StartCoroutine(Play(teleportTargets, droppedBox, needsRecoveryBox));
             return true;
         }
 
         private Vector3 NeckPosition => neck != null ? neck.position : transform.position + Vector3.up * 1.8f;
         private Vector3 FacePosition => head != null ? head.position + Vector3.up * 0.08f : NeckPosition + Vector3.up * 0.22f;
 
-        private IEnumerator Play(MonsterLampTarget[] teleportTargets)
+        private IEnumerator Play(MonsterLampTarget[] teleportTargets, BulbBox droppedBox, bool needsRecoveryBox)
         {
             if (screamSource == null)
             {
@@ -99,6 +104,13 @@ namespace UntilSix.Monster
 
             ShowBlackout();
             yield return Fade(0f, 1f, true);
+            if (needsRecoveryBox && lampInteraction != null)
+            {
+                if (droppedBox != null)
+                    Destroy(droppedBox.gameObject);
+                lampInteraction.SpawnRecoveryBox();
+            }
+
             player.ViewCamera.fieldOfView = normalFieldOfView;
             Teleport(teleportTargets);
             RestoreAgentPose();
@@ -107,6 +119,8 @@ namespace UntilSix.Monster
             yield return new WaitForSeconds(BlackoutDuration);
 
             player.SetCinematicLocked(false);
+            if (lampInteraction != null)
+                lampInteraction.RestoreReticle();
             player.PlayScaredBreath(recoveryBreath, 0.5f);
             yield return Fade(1f, 0f, false);
             blackout.gameObject.SetActive(false);
@@ -216,6 +230,8 @@ namespace UntilSix.Monster
                 screamSource.Stop();
             if (blackout != null)
                 blackout.gameObject.SetActive(false);
+            if (lampInteraction != null)
+                lampInteraction.RestoreReticle();
             if (player != null)
             {
                 player.ViewCamera.fieldOfView = normalFieldOfView;
