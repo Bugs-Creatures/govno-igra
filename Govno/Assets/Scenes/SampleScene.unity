@@ -6428,23 +6428,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f555acb67cab4828a356005b69e45b13, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   masterVolume: 1
   cleanFootstepsVolume: 0.13
   creakyFootstepsVolume: 0.12
   jumpSound: {fileID: 8300000, guid: 056b70809ae148cea34560c47a84d629, type: 3}
-  jumpVolume: 0.3
+  jumpVolume: 0.12
   landingSound: {fileID: 8300000, guid: ab6d078dc27a4ad682978f27d911668e, type: 3}
-  landingVolume: 0.3
+  landingVolume: 0.1
   boxPickupSound: {fileID: 8300000, guid: 211e39f45e564d54881e8049d921a26a, type: 3}
-  boxPickupVolume: 0.5
+  boxPickupVolume: 0.16
   boxImpactSound: {fileID: 8300000, guid: fa7e38d1d8944c11921aff90230cc9b1, type: 3}
-  boxImpactVolume: 0.55
+  boxImpactVolume: 0.16
   doorOpenVolume: 0.4
   doorCloseVolume: 0.4
   lampHumVolume: 0.3675
-  bulbTurningVolume: 0.5
+  bulbTurningVolume: 0.15
   bulbRemovedVolume: 0.9
   rainClip: {fileID: 8300000, guid: a37fd6ec750f456e8c7908176112c002, type: 3}
   rainFirstFloorVolume: 0.032
