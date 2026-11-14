@@ -77,6 +77,10 @@ namespace UntilSix.Monster
                     playingChaseScream = false;
                     PlayChaseAudio(chaseMusic, true);
                 }
+                else
+                {
+                    UpdateChaseVolume();
+                }
 
                 movement.ChaseTowards(player.transform.position, Time.deltaTime);
                 return;
@@ -179,7 +183,15 @@ namespace UntilSix.Monster
 
             chaseMusicSource.clip = clip;
             chaseMusicSource.loop = loop;
+            UpdateChaseVolume();
             chaseMusicSource.Play();
+        }
+
+        private void UpdateChaseVolume()
+        {
+            GameAudioSettings audio = GameAudioSettings.Current;
+            if (chaseMusicSource != null && audio != null)
+                chaseMusicSource.volume = audio.ChaseVolume(playingChaseScream);
         }
     }
 }

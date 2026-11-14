@@ -7,7 +7,6 @@ namespace UntilSix.Monster
     [DisallowMultipleComponent]
     public sealed class MonsterLightPresentation : MonoBehaviour
     {
-        private const float DisappearanceDelay = 1f;
         private static readonly int Opacity = Shader.PropertyToID("_Opacity");
 
         [SerializeField] private PlayerLightZones lightZones;
@@ -33,7 +32,6 @@ namespace UntilSix.Monster
         private readonly List<Footstep> pendingSteps = new List<Footstep>(4);
         private int nextPrint;
         private int lastClip = -1;
-        private float enteredLightAt;
         private bool hidden;
 
         private Vector3 ZonePosition => transform.position + Vector3.up * 0.25f;
@@ -42,7 +40,6 @@ namespace UntilSix.Monster
         private void OnEnable()
         {
             bodyRenderers = body != null ? body.GetComponentsInChildren<Renderer>(true) : null;
-            enteredLightAt = float.PositiveInfinity;
             SetHidden(InLight);
         }
 
@@ -73,14 +70,14 @@ namespace UntilSix.Monster
                 index++;
             lastClip = index;
             stepAudio.pitch = Random.Range(0.48f, 0.54f);
-            stepAudio.PlayOneShot(stepClips[index]);
+            float volume = GameAudioSettings.Current?.MonsterFootstepsVolume ?? 1f;
+            stepAudio.PlayOneShot(stepClips[index], volume);
         }
 
         private void RefreshVisibility()
         {
             if (!InLight)
             {
-                enteredLightAt = float.PositiveInfinity;
                 if (hidden)
                     SetHidden(false);
                 return;
@@ -89,16 +86,13 @@ namespace UntilSix.Monster
             if (hidden)
                 return;
 
-            enteredLightAt = Mathf.Min(enteredLightAt, Time.time);
-            if (Time.time - enteredLightAt < DisappearanceDelay)
-                return;
-
             if ((disappearanceSound != null || playerBreathSound != null) && PlayerCanSeeMonster())
             {
+                GameAudioSettings audio = GameAudioSettings.Current;
                 if (disappearanceAudioSource != null && disappearanceSound != null)
-                    disappearanceAudioSource.PlayOneShot(disappearanceSound);
+                    disappearanceAudioSource.PlayOneShot(disappearanceSound, audio?.MonsterDisappearanceVolume ?? 1f);
                 if (playerBreathAudioSource != null && playerBreathSound != null)
-                    playerBreathAudioSource.PlayOneShot(playerBreathSound);
+                    playerBreathAudioSource.PlayOneShot(playerBreathSound, audio?.PlayerBreathVolume ?? 1f);
             }
 
             SetHidden(true);

@@ -34,6 +34,13 @@ public sealed class GameAudioSettings : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float bulbTurningVolume = 0.5f;
     [SerializeField, Range(0f, 1f)] private float bulbRemovedVolume = 0.9f;
 
+    [Header("Monster")]
+    [SerializeField, Range(0f, 1f)] private float monsterFootstepsVolume = 0.9f;
+    [SerializeField, Range(0f, 1f)] private float monsterDisappearanceVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float playerBreathVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float chaseScreamVolume = 1f;
+    [SerializeField, Range(0f, 1f)] private float chaseMusicVolume = 1f;
+
     [Header("Rain")]
     [SerializeField] private AudioClip rainClip;
     [SerializeField, Range(0f, 1f)] private float rainFirstFloorVolume = 0.018f;
@@ -74,6 +81,10 @@ public sealed class GameAudioSettings : MonoBehaviour
     public float LampHumVolume => masterVolume * lampHumVolume;
     public float BulbTurningVolume => masterVolume * bulbTurningVolume;
     public float BulbRemovedVolume => masterVolume * bulbRemovedVolume;
+    public float MonsterFootstepsVolume => masterVolume * monsterFootstepsVolume;
+    public float MonsterDisappearanceVolume => masterVolume * monsterDisappearanceVolume;
+    public float PlayerBreathVolume => masterVolume * playerBreathVolume;
+    public float ChaseVolume(bool scream) => masterVolume * (scream ? chaseScreamVolume : chaseMusicVolume);
 
     private void OnEnable()
     {
