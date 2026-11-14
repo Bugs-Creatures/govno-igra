@@ -5,6 +5,8 @@ using UnityEngine.Rendering;
 internal sealed class MeshOutline
 {
     private static readonly int CenterId = Shader.PropertyToID("_OutlineCenter");
+    private static readonly int OffsetId = Shader.PropertyToID("_OutlineOffset");
+    private const int OutlineDirections = 8;
     private static Mesh cube;
     private readonly List<MeshRenderer> renderers = new();
     private readonly List<MeshRenderer> maskRenderers = new();
@@ -46,11 +48,18 @@ internal sealed class MeshOutline
     {
         foreach (MeshFilter filter in filters)
         {
-            if (filter == null || filter.sharedMesh == null)
+            if (filter == null || filter.sharedMesh == null ||
+                !filter.TryGetComponent(out MeshRenderer source) || !source.enabled)
                 continue;
 
-            // Submit the mask and the expanded mesh as separate renderers, ordered by render queue.
-            renderers.Add(AddRenderer(filter.transform, filter.sharedMesh));
+            // Draw the exact mesh as a stencil mask, then offset copies in screen space.
+            for (int i = 0; i < OutlineDirections; i++)
+            {
+                float angle = i * (2f * Mathf.PI / OutlineDirections);
+                Vector4 offset = new(Mathf.Cos(angle), Mathf.Sin(angle), 0f, 0f);
+                renderers.Add(AddRenderer(filter.transform, filter.sharedMesh, offset));
+            }
+
             var mask = AddRenderer(filter.transform, filter.sharedMesh);
             var passes = new Material[filter.sharedMesh.subMeshCount];
             System.Array.Fill(passes, silhouetteMask);
@@ -59,7 +68,7 @@ internal sealed class MeshOutline
         }
     }
 
-    private static MeshRenderer AddRenderer(Transform parent, Mesh mesh)
+    private static MeshRenderer AddRenderer(Transform parent, Mesh mesh, Vector4 offset = default)
     {
         var child = new GameObject("Outline") { layer = parent.gameObject.layer };
         child.transform.SetParent(parent, false);
@@ -69,6 +78,7 @@ internal sealed class MeshOutline
         renderer.receiveShadows = false;
         var properties = new MaterialPropertyBlock();
         properties.SetVector(CenterId, mesh.bounds.center);
+        properties.SetVector(OffsetId, offset);
         renderer.SetPropertyBlock(properties);
         return renderer;
     }

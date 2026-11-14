@@ -37,7 +37,8 @@ public sealed class CottageDoor : MonoBehaviour
         if (audioSource != null && sound != null)
         {
             audioSource.Stop();
-            audioSource.PlayOneShot(sound);
+            float volume = GameAudioSettings.Current?.DoorVolume(open) ?? 1f;
+            audioSource.PlayOneShot(sound, volume);
         }
     }
 

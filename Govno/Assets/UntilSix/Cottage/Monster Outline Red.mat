@@ -28,7 +28,7 @@ Material:
     - _ColorMask: 15
     - _StencilComparison: 6
     - _StencilPass: 0
-    - _Width: 0.04
+    - _Width: 0.032
     m_Colors:
     - _Tint: {r: 1, g: 0.17, b: 0.08, a: 1}
   m_BuildTextureStacks: []

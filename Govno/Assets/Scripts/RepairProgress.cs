@@ -5,8 +5,8 @@ public sealed class RepairProgress : UnityEngine.UI.MaskableGraphic
 {
     [SerializeField, Min(1f)] private float radius = 20f;
     [SerializeField, Min(0.1f)] private float width = 3f;
-    [SerializeField] private Color startColor = new(1f, 0.67f, 0.24f);
-    [SerializeField] private Color endColor = new(0.46f, 1f, 0.74f);
+    [SerializeField] private Color startColor = new(1f, 0.12f, 0.12f);
+    [SerializeField] private Color endColor = new(0.16f, 1f, 0.24f);
     [SerializeField, Min(0f)] private float cancelFadeSeconds = 0.25f;
     [SerializeField, Min(0f)] private float completeFadeSeconds = 0.45f;
 

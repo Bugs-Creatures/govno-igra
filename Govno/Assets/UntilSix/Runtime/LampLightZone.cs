@@ -12,9 +12,14 @@ namespace UntilSix.Monster
         [SerializeField] private bool useBox;
         [SerializeField] private Bounds box = new Bounds(Vector3.up, new Vector3(3f, 2f, 3f));
 
-        public bool ContainsLight(Vector3 worldPosition)
+        public bool ContainsLight(Vector3 worldPosition) =>
+            HasWorkingLamp() && ContainsPosition(worldPosition);
+
+        public CeilingLamp Fixture => fixture;
+
+        public bool ContainsPosition(Vector3 worldPosition)
         {
-            if (!isActiveAndEnabled || !HasWorkingLamp())
+            if (!isActiveAndEnabled)
                 return false;
 
             Vector3 offset = transform.InverseTransformPoint(worldPosition);

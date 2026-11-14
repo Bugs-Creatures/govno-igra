@@ -10,7 +10,7 @@ public sealed class FirstPersonController : MonoBehaviour
     [SerializeField, Min(0f)] private float sprintSpeed = 4.0444444f;
     [SerializeField, Min(0f)] private float crouchSpeed = 1.2222223f;
     [SerializeField, Min(0.1f)] private float crouchHeight = 1.15f;
-    [SerializeField, Min(0f)] private float jumpHeight = 1.2f;
+    [SerializeField, Min(0f)] private float jumpHeight = 0.85f;
     [SerializeField, Min(0f)] private float mouseSensitivity = 0.12f;
 
     [Header("Movement Audio")]
@@ -41,12 +41,20 @@ public sealed class FirstPersonController : MonoBehaviour
     private float pitch;
     private float verticalSpeed;
     private bool crouched;
+    private bool landingAfterJump;
     private float timeSinceGrounded = float.PositiveInfinity;
     private float distanceSinceFootstep;
     private int previousFootstep = -1;
     private bool previousFootstepWasCreaky;
+    private int resumeFrame = -1;
 
     public bool HasGameplayInput { get; private set; }
+    public bool IsPaused { get; private set; }
+    public float MouseSensitivity
+    {
+        get => mouseSensitivity;
+        set => mouseSensitivity = Mathf.Max(0f, value);
+    }
     public bool IsGrounded => controller.isGrounded;
     public Vector3 Velocity => controller.velocity;
 
@@ -85,6 +93,7 @@ public sealed class FirstPersonController : MonoBehaviour
     private void OnDisable()
     {
         HasGameplayInput = false;
+        landingAfterJump = false;
         timeSinceGrounded = float.PositiveInfinity;
         distanceSinceFootstep = 0f;
         if (playerActions == null)
@@ -99,10 +108,19 @@ public sealed class FirstPersonController : MonoBehaviour
         playerActions?.Dispose();
     }
 
+    public void SetPaused(bool paused)
+    {
+        IsPaused = paused;
+        HasGameplayInput = false;
+        if (!paused)
+            resumeFrame = Time.frameCount;
+        SetCursorCaptured(!paused && isActiveAndEnabled);
+    }
+
     private void Update()
     {
-        if (Keyboard.current?.escapeKey.wasPressedThisFrame == true)
-            SetCursorCaptured(false);
+        if (IsPaused || Time.frameCount == resumeFrame)
+            return;
 
         bool captured = Cursor.lockState == CursorLockMode.Locked;
         HasGameplayInput = captured && Application.isFocused;
@@ -131,7 +149,12 @@ public sealed class FirstPersonController : MonoBehaviour
         if (grounded)
         {
             if (tookOff)
+            {
                 verticalSpeed = Mathf.Sqrt(2f * Gravity * jumpHeight);
+                GameAudioSettings audio = GameAudioSettings.Current;
+                if (movementAudioSource != null && audio != null && audio.JumpSound != null)
+                    movementAudioSource.PlayOneShot(audio.JumpSound, audio.JumpVolume);
+            }
             else if (verticalSpeed < 0f)
                 verticalSpeed = -GroundingSpeed;
         }
@@ -157,9 +180,20 @@ public sealed class FirstPersonController : MonoBehaviour
     {
         if (tookOff)
         {
+            landingAfterJump = true;
             timeSinceGrounded = float.PositiveInfinity;
             distanceSinceFootstep = 0f;
             return;
+        }
+
+        if (grounded && verticalSpeed < 0f && (landingAfterJump ||
+                (!float.IsPositiveInfinity(timeSinceGrounded) && timeSinceGrounded >= StairContactGrace)))
+        {
+            landingAfterJump = false;
+            distanceSinceFootstep = 0f;
+            GameAudioSettings audio = GameAudioSettings.Current;
+            if (movementAudioSource != null && audio != null && audio.LandingSound != null)
+                movementAudioSource.PlayOneShot(audio.LandingSound, audio.LandingVolume);
         }
 
         timeSinceGrounded = grounded ? 0f : timeSinceGrounded + deltaTime;
@@ -205,7 +239,10 @@ public sealed class FirstPersonController : MonoBehaviour
         previousFootstep = index;
         previousFootstepWasCreaky = useCreakyStep;
         if (movementAudioSource != null && clips[index] != null)
-            movementAudioSource.PlayOneShot(clips[index]);
+        {
+            float volume = GameAudioSettings.Current?.FootstepsVolume(useCreakyStep) ?? 1f;
+            movementAudioSource.PlayOneShot(clips[index], volume);
+        }
     }
 
     private void UpdateStance(bool wantsToCrouch)
