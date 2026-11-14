@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UntilSix.Monster
@@ -8,6 +9,19 @@ namespace UntilSix.Monster
         [SerializeField] private LampLightZone[] zones = new LampLightZone[0];
 
         public bool IsInLight => IsLitAt(transform.position);
+
+        public void FindBrokenLamps(HashSet<CeilingLamp> lamps)
+        {
+            lamps.Clear();
+            foreach (LampLightZone zone in zones)
+            {
+                if (zone == null || zone.Fixture == null || !zone.Fixture.isActiveAndEnabled ||
+                    !zone.Fixture.IsBroken || !zone.ContainsPosition(transform.position))
+                    continue;
+
+                lamps.Add(zone.Fixture);
+            }
+        }
 
         public bool IsLitAt(Vector3 position)
         {

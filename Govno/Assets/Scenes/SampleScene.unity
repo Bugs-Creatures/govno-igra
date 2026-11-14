@@ -6127,6 +6127,7 @@ GameObject:
   - component: {fileID: 1501000015}
   - component: {fileID: 1502000280}
   - component: {fileID: 1740000005}
+  - component: {fileID: 1501000016}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6208,6 +6209,26 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 30f9854fd25746ce9f44ba1f31b2fd29, type: 3}
   creakyFootstepChance: 0.25
   footstepInterval: 0.6
+--- !u!114 &1501000016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f555acb67cab4828a356005b69e45b13, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  masterVolume: 1
+  cleanFootstepsVolume: 0.3
+  creakyFootstepsVolume: 0.3
+  doorOpenVolume: 1
+  doorCloseVolume: 1
+  lampHumVolume: 0.3675
+  bulbTurningVolume: 0.5
+  bulbRemovedVolume: 0.9
 --- !u!1 &1501000010
 GameObject:
   m_ObjectHideFlags: 0
@@ -6333,7 +6354,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6673,6 +6694,10 @@ MonoBehaviour:
   lampOutlineColor: {r: 1, g: 0.86, b: 0.1, a: 1}
   lampOutlineWidth: 2
   boxOutlineWidth: 0.014
+  brokenLampHintSize: 27.6
+  brokenLampHintColor: {r: 1, g: 0.83, b: 0.12, a: 0.15}
+  brokenLampHintPulseAmount: 0.3
+  brokenLampHintPulseSeconds: 1.25
 --- !u!1 &1515404972 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8934777400606672865, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}

@@ -205,7 +205,10 @@ public sealed class FirstPersonController : MonoBehaviour
         previousFootstep = index;
         previousFootstepWasCreaky = useCreakyStep;
         if (movementAudioSource != null && clips[index] != null)
-            movementAudioSource.PlayOneShot(clips[index]);
+        {
+            float volume = GameAudioSettings.Current?.FootstepsVolume(useCreakyStep) ?? 1f;
+            movementAudioSource.PlayOneShot(clips[index], volume);
+        }
     }
 
     private void UpdateStance(bool wantsToCrouch)
