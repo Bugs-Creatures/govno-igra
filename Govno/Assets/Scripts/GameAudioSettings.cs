@@ -54,6 +54,11 @@ public sealed class GameAudioSettings : MonoBehaviour
 
     public static GameAudioSettings Current { get; private set; }
     public AudioMixerGroup AudioOutput => audioOutput;
+    public float MasterVolume
+    {
+        get => masterVolume;
+        set => masterVolume = Mathf.Clamp01(value);
+    }
 
     public float FootstepsVolume(bool creaky) => masterVolume *
         (creaky ? creakyFootstepsVolume : cleanFootstepsVolume);
@@ -100,6 +105,9 @@ public sealed class GameAudioSettings : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (AudioListener.pause)
+            return;
+
         if (rainClip == null)
         {
             if (rainSource != null && rainSource.isPlaying)

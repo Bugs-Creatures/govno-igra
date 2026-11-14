@@ -133,6 +133,9 @@ public sealed class LampInteraction : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (player.IsPaused)
+            return;
+
         UpdateBoxMotion();
 
         var primary = Mouse.current?.leftButton;
@@ -142,7 +145,7 @@ public sealed class LampInteraction : MonoBehaviour
             ? FindAimCollider(aimRay, interactionDistance)
             : null;
         CeilingLamp aimedLamp = targetCollider != null ? targetCollider.GetComponentInParent<CeilingLamp>() : null;
-        bool wantsToDrop = Application.isFocused && Keyboard.current?.gKey.wasPressedThisFrame == true;
+        bool wantsToDrop = player.HasGameplayInput && Keyboard.current?.gKey.wasPressedThisFrame == true;
         UpdateInteraction(targetCollider, aimedLamp, primary?.wasPressedThisFrame == true, primary?.isPressed == true, wantsToDrop);
         UpdateLampHints(aimRay, targetCollider, aimedLamp, canAim);
         if (heldItemCamera != null)

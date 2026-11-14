@@ -46,8 +46,15 @@ public sealed class FirstPersonController : MonoBehaviour
     private float distanceSinceFootstep;
     private int previousFootstep = -1;
     private bool previousFootstepWasCreaky;
+    private int resumeFrame = -1;
 
     public bool HasGameplayInput { get; private set; }
+    public bool IsPaused { get; private set; }
+    public float MouseSensitivity
+    {
+        get => mouseSensitivity;
+        set => mouseSensitivity = Mathf.Max(0f, value);
+    }
     public bool IsGrounded => controller.isGrounded;
     public Vector3 Velocity => controller.velocity;
 
@@ -101,10 +108,19 @@ public sealed class FirstPersonController : MonoBehaviour
         playerActions?.Dispose();
     }
 
+    public void SetPaused(bool paused)
+    {
+        IsPaused = paused;
+        HasGameplayInput = false;
+        if (!paused)
+            resumeFrame = Time.frameCount;
+        SetCursorCaptured(!paused && isActiveAndEnabled);
+    }
+
     private void Update()
     {
-        if (Keyboard.current?.escapeKey.wasPressedThisFrame == true)
-            SetCursorCaptured(false);
+        if (IsPaused || Time.frameCount == resumeFrame)
+            return;
 
         bool captured = Cursor.lockState == CursorLockMode.Locked;
         HasGameplayInput = captured && Application.isFocused;
