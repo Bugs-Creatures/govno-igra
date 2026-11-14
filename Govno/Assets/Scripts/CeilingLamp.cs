@@ -6,9 +6,8 @@ public sealed class CeilingLamp : MonoBehaviour
     [SerializeField, Min(0.01f)] private float secondsToRepair = 2.5f;
     [SerializeField] private Light lampLight;
     [SerializeField] private AudioSource lampAudio;
-    [SerializeField] private Renderer diffuser;
-    [SerializeField] private Material workingMaterial;
-    [SerializeField] private Material brokenMaterial;
+    [SerializeField] private GameObject intactVisual;
+    [SerializeField] private GameObject brokenVisual;
     [SerializeField] private bool useLampForRendering = true;
 
     private MeshOutline outline;
@@ -37,7 +36,7 @@ public sealed class CeilingLamp : MonoBehaviour
 
     private void OnValidate()
     {
-        ApplyState();
+        UpdateLight();
         audioStateDirty = true;
     }
 
@@ -72,16 +71,23 @@ public sealed class CeilingLamp : MonoBehaviour
     public void SetOutline(Material material, Material silhouetteMask = null)
     {
         if (outline == null && material != null)
-            outline = new MeshOutline(GetComponentsInChildren<MeshFilter>(), silhouetteMask);
+            outline = new MeshOutline(GetComponentsInChildren<MeshFilter>(true), silhouetteMask);
         outline?.SetMaterial(material);
     }
 
     private void ApplyState()
     {
+        UpdateLight();
+        if (intactVisual != null)
+            intactVisual.SetActive(!isBroken);
+        if (brokenVisual != null)
+            brokenVisual.SetActive(isBroken);
+    }
+
+    private void UpdateLight()
+    {
         if (lampLight != null)
             lampLight.enabled = useLampForRendering && IsWorking;
-        if (diffuser != null)
-            diffuser.sharedMaterial = isBroken ? brokenMaterial : workingMaterial;
     }
 
     private void ApplyAudioState()
