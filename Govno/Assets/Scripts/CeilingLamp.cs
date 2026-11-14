@@ -5,12 +5,14 @@ public sealed class CeilingLamp : MonoBehaviour
     [SerializeField] private bool isBroken = true;
     [SerializeField, Min(0.01f)] private float secondsToRepair = 2.5f;
     [SerializeField] private Light lampLight;
+    [SerializeField] private AudioSource lampAudio;
     [SerializeField] private Renderer diffuser;
     [SerializeField] private Material workingMaterial;
     [SerializeField] private Material brokenMaterial;
     [SerializeField] private bool useLampForRendering = true;
 
     private MeshOutline outline;
+    private bool audioStateDirty;
 
     public bool IsBroken => isBroken;
     public bool IsWorking => isActiveAndEnabled && !isBroken;
@@ -24,16 +26,25 @@ public sealed class CeilingLamp : MonoBehaviour
     private void OnEnable()
     {
         ApplyState();
+        ApplyAudioState();
     }
 
     private void OnDisable()
     {
         ApplyState();
+        ApplyAudioState();
     }
 
     private void OnValidate()
     {
         ApplyState();
+        audioStateDirty = true;
+    }
+
+    private void Update()
+    {
+        if (audioStateDirty)
+            ApplyAudioState();
     }
 
     public bool TryRepair(BulbBox box)
@@ -43,6 +54,7 @@ public sealed class CeilingLamp : MonoBehaviour
 
         isBroken = false;
         ApplyState();
+        ApplyAudioState();
         return true;
     }
 
@@ -53,6 +65,7 @@ public sealed class CeilingLamp : MonoBehaviour
 
         isBroken = true;
         ApplyState();
+        ApplyAudioState();
         return true;
     }
 
@@ -69,5 +82,17 @@ public sealed class CeilingLamp : MonoBehaviour
             lampLight.enabled = useLampForRendering && IsWorking;
         if (diffuser != null)
             diffuser.sharedMaterial = isBroken ? brokenMaterial : workingMaterial;
+    }
+
+    private void ApplyAudioState()
+    {
+        audioStateDirty = false;
+        if (lampAudio == null)
+            return;
+
+        if (!IsWorking)
+            lampAudio.Stop();
+        else if (lampAudio.clip != null && !lampAudio.isPlaying)
+            lampAudio.Play();
     }
 }
