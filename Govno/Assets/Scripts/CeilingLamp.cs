@@ -10,7 +10,7 @@ public sealed class CeilingLamp : MonoBehaviour
     [SerializeField] private Material brokenMaterial;
     [SerializeField] private bool useLampForRendering = true;
 
-    private MeshRenderer[] outlineRenderers;
+    private MeshOutline outline;
 
     public bool IsBroken => isBroken;
     public bool IsWorking => isActiveAndEnabled && !isBroken;
@@ -56,35 +56,11 @@ public sealed class CeilingLamp : MonoBehaviour
         return true;
     }
 
-    public void SetOutline(Material material)
+    public void SetOutline(Material material, Material silhouetteMask = null)
     {
-        if (outlineRenderers == null)
-        {
-            if (material == null)
-                return;
-
-            MeshFilter[] meshes = GetComponentsInChildren<MeshFilter>();
-            outlineRenderers = new MeshRenderer[meshes.Length];
-            for (int i = 0; i < meshes.Length; i++)
-            {
-                var mesh = meshes[i];
-                var outline = new GameObject("Outline");
-                outline.layer = mesh.gameObject.layer;
-                outline.transform.SetParent(mesh.transform, false);
-                outline.AddComponent<MeshFilter>().sharedMesh = mesh.sharedMesh;
-                var renderer = outline.AddComponent<MeshRenderer>();
-                renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                renderer.receiveShadows = false;
-                outlineRenderers[i] = renderer;
-            }
-        }
-
-        foreach (MeshRenderer renderer in outlineRenderers)
-        {
-            renderer.enabled = material != null;
-            if (material != null)
-                renderer.sharedMaterial = material;
-        }
+        if (outline == null && material != null)
+            outline = new MeshOutline(GetComponentsInChildren<MeshFilter>(), silhouetteMask);
+        outline?.SetMaterial(material);
     }
 
     private void ApplyState()

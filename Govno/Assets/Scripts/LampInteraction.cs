@@ -13,12 +13,25 @@ public sealed class LampInteraction : MonoBehaviour
     [SerializeField, Min(0.1f)] private float interactionDistance = 3.2f;
     [SerializeField, Min(0f), Tooltip("Multiplies the forward speed of the throw, including movement momentum. The upward arc is fixed.")]
     private float throwStrength = 0.75f;
+    [SerializeField, Tooltip("Box tilt in degrees relative to the camera. Negative angles tip the opening toward the player.")]
+    private float heldBoxTilt = -34f;
+    [SerializeField, Min(0.1f), Tooltip("Distance in front of the camera, in meters.")]
+    private float heldBoxDistance = 0.92f;
+    [SerializeField, Tooltip("Vertical offset from the camera, in meters. Negative values move the box down.")]
+    private float heldBoxHeight = -0.29f;
     [SerializeField] private Shader lampOutlineShader;
     [SerializeField, ColorUsage(false)] private Color lampOutlineColor = new(1f, 0.86f, 0.1f);
     [SerializeField, Min(0f)] private float lampOutlineWidth = 0.018f;
 
     private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
     private static readonly int OutlineWidthId = Shader.PropertyToID("_OutlineWidth");
+    private static readonly int OutlineCullId = Shader.PropertyToID("_OutlineCull");
+    private static readonly int OutlineZTestId = Shader.PropertyToID("_OutlineZTest");
+    private static readonly int OutlineColorMaskId = Shader.PropertyToID("_OutlineColorMask");
+    private static readonly int OutlineStencilRefId = Shader.PropertyToID("_OutlineStencilRef");
+    private static readonly int OutlineStencilWriteMaskId = Shader.PropertyToID("_OutlineStencilWriteMask");
+    private static readonly int OutlineStencilCompareId = Shader.PropertyToID("_OutlineStencilCompare");
+    private static readonly int OutlineStencilPassId = Shader.PropertyToID("_OutlineStencilPass");
     private readonly RaycastHit[] aimHits = new RaycastHit[8];
     private FirstPersonController player;
     private CharacterController playerCollider;
@@ -28,14 +41,16 @@ public sealed class LampInteraction : MonoBehaviour
     private int heldItemLayer = -1;
     private int originalCameraMask;
     private CeilingLamp outlinedLamp;
+    private BulbBox outlinedBox;
     private Material outlineMaterial;
+    private Material boxOutlineMaterial;
+    private Material outlineSilhouetteMask;
     private CeilingLamp repairTarget;
     private float repairElapsed;
     private float bobPhase;
     private float bobAmount;
     private Vector3 turnSway;
-    private Vector3 holdPosition;
-    private Quaternion holdRotation;
+    private float holdSideOffset;
     private Quaternion previousViewRotation;
     private bool restingReticleFilled;
 
@@ -43,12 +58,27 @@ public sealed class LampInteraction : MonoBehaviour
     {
         player = GetComponent<FirstPersonController>();
         playerCollider = GetComponent<CharacterController>();
-        holdPosition = boxHoldPoint.localPosition;
-        holdRotation = boxHoldPoint.localRotation;
+        holdSideOffset = boxHoldPoint.localPosition.x;
         previousViewRotation = viewCamera.transform.rotation;
         restingReticleFilled = reticle.Filled;
         if (lampOutlineShader != null)
+        {
             outlineMaterial = new Material(lampOutlineShader);
+            boxOutlineMaterial = new Material(outlineMaterial);
+            boxOutlineMaterial.EnableKeyword("BOX_SILHOUETTE");
+            boxOutlineMaterial.SetFloat(OutlineCullId, (float)UnityEngine.Rendering.CullMode.Back);
+            outlineSilhouetteMask = new Material(outlineMaterial) { renderQueue = outlineMaterial.renderQueue - 1 };
+            outlineSilhouetteMask.EnableKeyword("SILHOUETTE_MASK");
+            outlineSilhouetteMask.SetFloat(OutlineCullId, (float)UnityEngine.Rendering.CullMode.Off);
+            outlineSilhouetteMask.SetFloat(OutlineZTestId, (float)UnityEngine.Rendering.CompareFunction.Always);
+            outlineSilhouetteMask.SetFloat(OutlineColorMaskId, 0f);
+            outlineSilhouetteMask.SetFloat(OutlineStencilRefId, 1f);
+            outlineSilhouetteMask.SetFloat(OutlineStencilWriteMaskId, 1f);
+            outlineSilhouetteMask.SetFloat(OutlineStencilPassId, (float)UnityEngine.Rendering.StencilOp.Replace);
+            outlineMaterial.SetFloat(OutlineStencilRefId, 1f);
+            outlineMaterial.SetFloat(OutlineStencilCompareId, (float)UnityEngine.Rendering.CompareFunction.NotEqual);
+            outlineMaterial.EnableKeyword("OBJECT_SILHOUETTE");
+        }
 
         ConfigureHeldItemCamera();
     }
@@ -104,13 +134,14 @@ public sealed class LampInteraction : MonoBehaviour
         {
             DropBox();
             StopRepair(false);
-            SetLampOutline(null);
+            SetOutline(null, null);
             reticle.Filled = restingReticleFilled;
             return;
         }
 
         BulbBox box = null;
         CeilingLamp aimedLamp = null;
+        CottageDoor door = null;
         if (canAim)
         {
             Ray ray = viewCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
@@ -118,6 +149,9 @@ public sealed class LampInteraction : MonoBehaviour
             if (targetCollider != null)
             {
                 aimedLamp = targetCollider.GetComponentInParent<CeilingLamp>();
+                door = targetCollider.GetComponentInParent<CottageDoor>();
+                if (door != null && !door.isActiveAndEnabled)
+                    door = null;
                 if (heldBox == null)
                     box = targetCollider.GetComponentInParent<BulbBox>();
             }
@@ -125,28 +159,29 @@ public sealed class LampInteraction : MonoBehaviour
 
         CeilingLamp brokenLamp = aimedLamp != null && aimedLamp.IsBroken ? aimedLamp : null;
         CeilingLamp lamp = heldBox != null && heldBox.HasBulbs ? brokenLamp : null;
-        SetLampOutline(lamp);
-        reticle.Filled = restingReticleFilled || box != null || lamp != null;
+        SetOutline(lamp, box);
+        reticle.Filled = restingReticleFilled || box != null || lamp != null || door != null;
         if (repairTarget != null)
         {
             if (lamp != repairTarget || !primaryHeld)
             {
                 StopRepair(false);
+            }
+            else
+            {
+                repairElapsed += Time.deltaTime;
+                float progress = repairElapsed / repairTarget.SecondsToRepair;
+                repairProgress.ShowProgress(progress);
+                if (progress >= 1f)
+                {
+                    bool repaired = repairTarget.TryRepair(heldBox);
+                    StopRepair(repaired);
+                    if (repaired)
+                        SetOutline(null, null);
+                    reticle.Filled = restingReticleFilled;
+                }
                 return;
             }
-
-            repairElapsed += Time.deltaTime;
-            float progress = repairElapsed / repairTarget.SecondsToRepair;
-            repairProgress.ShowProgress(progress);
-            if (progress >= 1f)
-            {
-                bool repaired = repairTarget.TryRepair(heldBox);
-                StopRepair(repaired);
-                if (repaired)
-                    SetLampOutline(null);
-                reticle.Filled = restingReticleFilled;
-            }
-            return;
         }
 
         if (!canAim || !primaryPressed)
@@ -154,6 +189,7 @@ public sealed class LampInteraction : MonoBehaviour
 
         if (box != null)
         {
+            SetOutline(null, null);
             heldBox = box;
             heldBox.PickUp(boxHoldPoint, heldItemLayer);
             reticle.Filled = restingReticleFilled;
@@ -163,28 +199,49 @@ public sealed class LampInteraction : MonoBehaviour
             repairTarget = lamp;
             repairProgress.ShowProgress(0f);
         }
+        else if (door != null)
+        {
+            door.Toggle();
+        }
     }
 
-    private void SetLampOutline(CeilingLamp lamp)
+    private void SetOutline(CeilingLamp lamp, BulbBox box)
     {
         if (outlineMaterial == null)
             return;
 
         if (lampOutlineWidth <= 0f)
+        {
             lamp = null;
+            box = null;
+        }
         if (lamp != null)
         {
             outlineMaterial.SetColor(OutlineColorId, lampOutlineColor);
             outlineMaterial.SetFloat(OutlineWidthId, lampOutlineWidth);
         }
+        if (box != null)
+        {
+            boxOutlineMaterial.SetColor(OutlineColorId, lampOutlineColor);
+            boxOutlineMaterial.SetFloat(OutlineWidthId, lampOutlineWidth);
+        }
 
-        if (outlinedLamp == lamp)
-            return;
-        if (outlinedLamp != null)
-            outlinedLamp.SetOutline(null);
-        outlinedLamp = lamp;
-        if (outlinedLamp != null)
-            outlinedLamp.SetOutline(outlineMaterial);
+        if (outlinedLamp != lamp)
+        {
+            if (outlinedLamp != null)
+                outlinedLamp.SetOutline(null);
+            outlinedLamp = lamp;
+            if (outlinedLamp != null)
+                outlinedLamp.SetOutline(outlineMaterial, outlineSilhouetteMask);
+        }
+        if (outlinedBox != box)
+        {
+            if (outlinedBox != null)
+                outlinedBox.SetOutline(null);
+            outlinedBox = box;
+            if (outlinedBox != null)
+                outlinedBox.SetOutline(boxOutlineMaterial);
+        }
     }
 
     private Collider FindAimCollider(Ray ray)
@@ -215,7 +272,7 @@ public sealed class LampInteraction : MonoBehaviour
 
     private void OnDisable()
     {
-        SetLampOutline(null);
+        SetOutline(null, null);
         if (reticle != null)
             reticle.Filled = restingReticleFilled;
 
@@ -228,7 +285,11 @@ public sealed class LampInteraction : MonoBehaviour
     private void OnDestroy()
     {
         if (outlineMaterial != null)
+        {
             Destroy(outlineMaterial);
+            Destroy(boxOutlineMaterial);
+            Destroy(outlineSilhouetteMask);
+        }
 
         if (heldItemCamera != null)
         {
@@ -260,6 +321,8 @@ public sealed class LampInteraction : MonoBehaviour
         Quaternion currentRotation = viewCamera.transform.rotation;
         Vector3 delta = (Quaternion.Inverse(previousViewRotation) * currentRotation).eulerAngles;
         previousViewRotation = currentRotation;
+        Vector3 holdPosition = new(holdSideOffset, heldBoxHeight, heldBoxDistance);
+        Quaternion holdRotation = Quaternion.Euler(heldBoxTilt, 0f, 0f);
         if (heldBox == null)
         {
             bobAmount = 0f;
@@ -290,5 +353,7 @@ public sealed class LampInteraction : MonoBehaviour
         boxHoldPoint.localRotation = holdRotation * Quaternion.Euler(
             -turnSway.y * 28f, turnSway.x * 25f,
             turnSway.x * 15f + Mathf.Sin(bobPhase) * 2f * bobAmount);
+        heldBox.UpdateLidMotion(Mathf.Sin(2f * bobPhase) * bobAmount * 2f,
+            turnSway.x, turnSway.y, dt);
     }
 }
