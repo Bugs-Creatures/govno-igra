@@ -402,10 +402,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1124252171}
   lampAudio: {fileID: 2099124001}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1647496895}
   brokenVisual: {fileID: 1647496894}
   useLampForRendering: 1
@@ -720,10 +720,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 785175654}
   lampAudio: {fileID: 2099124002}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 2019961639}
   brokenVisual: {fileID: 2019961638}
   useLampForRendering: 1
@@ -3142,10 +3142,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 3879789}
   lampAudio: {fileID: 2099124003}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1388879715}
   brokenVisual: {fileID: 1388879714}
   useLampForRendering: 1
@@ -3236,10 +3236,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 798550378}
   lampAudio: {fileID: 2099124004}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1764648745}
   brokenVisual: {fileID: 1764648744}
   useLampForRendering: 1
@@ -3633,10 +3633,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1761458042}
   lampAudio: {fileID: 2099124005}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1659593820}
   brokenVisual: {fileID: 1659593819}
   useLampForRendering: 1
@@ -3727,10 +3727,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1733935469}
   lampAudio: {fileID: 2099124006}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1896825631}
   brokenVisual: {fileID: 1896825630}
   useLampForRendering: 1
@@ -4535,10 +4535,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1376792483}
   lampAudio: {fileID: 2099124007}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 2144821352}
   brokenVisual: {fileID: 2144821351}
   useLampForRendering: 1
@@ -4914,10 +4914,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1109774794}
   lampAudio: {fileID: 2099124008}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 583976855}
   brokenVisual: {fileID: 583976854}
   useLampForRendering: 1
@@ -5143,10 +5143,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 2066857204}
   lampAudio: {fileID: 2099124009}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 383259033}
   brokenVisual: {fileID: 383259032}
   useLampForRendering: 1
@@ -5237,10 +5237,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 189008333}
   lampAudio: {fileID: 2099124010}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 465477913}
   brokenVisual: {fileID: 465477912}
   useLampForRendering: 1
@@ -6209,26 +6209,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 30f9854fd25746ce9f44ba1f31b2fd29, type: 3}
   creakyFootstepChance: 0.25
   footstepInterval: 0.6
---- !u!114 &1501000016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501000000}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f555acb67cab4828a356005b69e45b13, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  masterVolume: 1
-  cleanFootstepsVolume: 0.3
-  creakyFootstepsVolume: 0.3
-  doorOpenVolume: 1
-  doorCloseVolume: 1
-  lampHumVolume: 0.3675
-  bulbTurningVolume: 0.5
-  bulbRemovedVolume: 0.9
 --- !u!1 &1501000010
 GameObject:
   m_ObjectHideFlags: 0
@@ -6438,6 +6418,45 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1501000016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f555acb67cab4828a356005b69e45b13, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  masterVolume: 1
+  cleanFootstepsVolume: 0.13
+  creakyFootstepsVolume: 0.12
+  jumpSound: {fileID: 8300000, guid: 056b70809ae148cea34560c47a84d629, type: 3}
+  jumpVolume: 0.3
+  landingSound: {fileID: 8300000, guid: ab6d078dc27a4ad682978f27d911668e, type: 3}
+  landingVolume: 0.3
+  boxPickupSound: {fileID: 8300000, guid: 211e39f45e564d54881e8049d921a26a, type: 3}
+  boxPickupVolume: 0.5
+  boxImpactSound: {fileID: 8300000, guid: fa7e38d1d8944c11921aff90230cc9b1, type: 3}
+  boxImpactVolume: 0.55
+  doorOpenVolume: 0.4
+  doorCloseVolume: 0.4
+  lampHumVolume: 0.3675
+  bulbTurningVolume: 0.5
+  bulbRemovedVolume: 0.9
+  rainClip: {fileID: 8300000, guid: a37fd6ec750f456e8c7908176112c002, type: 3}
+  rainFirstFloorVolume: 0.032
+  rainUpperFloorVolume: 0.047
+  rainWindowBoost: 0.03
+  rainWindowRange: 2.25
+  rainFadeSeconds: 0.6
+  rainFloorFadeStart: 1.65
+  rainFloorFadeEnd: 3.15
+  rainListener: {fileID: 330585546}
+  rainWindowRoot: {fileID: 64821419}
+  rainWindowGlass: {fileID: 2100000, guid: 8b516fa28f032114aaa1213f47e1b05b, type: 2}
 --- !u!1 &1501000020
 GameObject:
   m_ObjectHideFlags: 0
@@ -6769,10 +6788,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1318916458}
   lampAudio: {fileID: 2099124011}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1959536381}
   brokenVisual: {fileID: 1959536379}
   useLampForRendering: 1
@@ -7938,10 +7957,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1060077809}
   lampAudio: {fileID: 2099124012}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 1315594840}
   brokenVisual: {fileID: 1315594839}
   useLampForRendering: 1
@@ -8450,10 +8469,10 @@ MonoBehaviour:
   isBroken: 0
   secondsToRemove: 1
   secondsToRepair: 1
-  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
-  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 873995569}
   lampAudio: {fileID: 2099124013}
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   intactVisual: {fileID: 577026636}
   brokenVisual: {fileID: 577026635}
   useLampForRendering: 1

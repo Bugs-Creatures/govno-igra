@@ -41,6 +41,7 @@ public sealed class FirstPersonController : MonoBehaviour
     private float pitch;
     private float verticalSpeed;
     private bool crouched;
+    private bool landingAfterJump;
     private float timeSinceGrounded = float.PositiveInfinity;
     private float distanceSinceFootstep;
     private int previousFootstep = -1;
@@ -85,6 +86,7 @@ public sealed class FirstPersonController : MonoBehaviour
     private void OnDisable()
     {
         HasGameplayInput = false;
+        landingAfterJump = false;
         timeSinceGrounded = float.PositiveInfinity;
         distanceSinceFootstep = 0f;
         if (playerActions == null)
@@ -131,7 +133,12 @@ public sealed class FirstPersonController : MonoBehaviour
         if (grounded)
         {
             if (tookOff)
+            {
                 verticalSpeed = Mathf.Sqrt(2f * Gravity * jumpHeight);
+                GameAudioSettings audio = GameAudioSettings.Current;
+                if (movementAudioSource != null && audio != null && audio.JumpSound != null)
+                    movementAudioSource.PlayOneShot(audio.JumpSound, audio.JumpVolume);
+            }
             else if (verticalSpeed < 0f)
                 verticalSpeed = -GroundingSpeed;
         }
@@ -157,9 +164,20 @@ public sealed class FirstPersonController : MonoBehaviour
     {
         if (tookOff)
         {
+            landingAfterJump = true;
             timeSinceGrounded = float.PositiveInfinity;
             distanceSinceFootstep = 0f;
             return;
+        }
+
+        if (grounded && verticalSpeed < 0f && (landingAfterJump ||
+                (!float.IsPositiveInfinity(timeSinceGrounded) && timeSinceGrounded >= StairContactGrace)))
+        {
+            landingAfterJump = false;
+            distanceSinceFootstep = 0f;
+            GameAudioSettings audio = GameAudioSettings.Current;
+            if (movementAudioSource != null && audio != null && audio.LandingSound != null)
+                movementAudioSource.PlayOneShot(audio.LandingSound, audio.LandingVolume);
         }
 
         timeSinceGrounded = grounded ? 0f : timeSinceGrounded + deltaTime;

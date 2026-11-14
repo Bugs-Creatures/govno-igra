@@ -31,6 +31,7 @@ public sealed class BulbBox : MonoBehaviour
     private float lidSwing;
     private float lidVelocity;
     private MeshOutline outline;
+    private AudioSource boxAudio;
 
     public bool HasBulbs => remaining > 0;
     public bool IsHeld { get; private set; }
@@ -83,6 +84,9 @@ public sealed class BulbBox : MonoBehaviour
         lidSwing = 0f;
         lidVelocity = 0f;
         ApplyHeldLidRotation();
+        GameAudioSettings audio = GameAudioSettings.Current;
+        if (audio != null)
+            PlayBoxSound(audio.BoxPickupSound, audio.BoxPickupVolume);
     }
 
     public void UpdateLidMotion(float stride, float turnSway, float pitchSway, float deltaTime)
@@ -147,7 +151,29 @@ public sealed class BulbBox : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         inThrow = false;
+        GameAudioSettings audio = GameAudioSettings.Current;
+        if (!IsHeld && audio != null)
+            PlayBoxSound(audio.BoxImpactSound, audio.BoxImpactVolume);
         HandleSurfaceContact(collision);
+    }
+
+    private void PlayBoxSound(AudioClip clip, float volume)
+    {
+        if (clip == null || volume <= 0f)
+            return;
+
+        if (boxAudio == null)
+        {
+            boxAudio = gameObject.AddComponent<AudioSource>();
+            boxAudio.playOnAwake = false;
+            boxAudio.spatialBlend = 1f;
+            boxAudio.dopplerLevel = 0f;
+            boxAudio.rolloffMode = AudioRolloffMode.Linear;
+            boxAudio.minDistance = 1f;
+            boxAudio.maxDistance = 8f;
+        }
+
+        boxAudio.PlayOneShot(clip, volume);
     }
 
     private void OnCollisionStay(Collision collision)
