@@ -400,7 +400,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1124252171}
   lampAudio: {fileID: 2099124001}
   intactVisual: {fileID: 1647496895}
@@ -425,7 +428,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1001 &64821418
 PrefabInstance:
@@ -582,9 +585,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -2540010526083364514, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
       insertIndex: -1
       addedObject: {fileID: 169083478}
-    - targetCorrespondingSourceObject: {fileID: -2540010526083364514, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 169083477}
   m_SourcePrefab: {fileID: 100100000, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
 --- !u!1 &64821419 stripped
 GameObject:
@@ -718,7 +718,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 785175654}
   lampAudio: {fileID: 2099124002}
   intactVisual: {fileID: 2019961639}
@@ -743,31 +746,13 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &169083472 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2540010526083364514, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
   m_PrefabInstance: {fileID: 64821418}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &169083477
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 169083472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5efe9d0bb9c447d1a3a5f61f48218d8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CottageDoor
-  startsOpen: 0
-  openAngle: -89
-  degreesPerSecond: 210
-  audioSource: {fileID: 169083478}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
 --- !u!82 &169083478
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1040,8 +1025,8 @@ MonoBehaviour:
   openAngle: 89
   degreesPerSecond: 210
   audioSource: {fileID: 197160989}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &197160989
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1187,8 +1172,8 @@ MonoBehaviour:
   openAngle: 89
   degreesPerSecond: 210
   audioSource: {fileID: 199538901}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &199538901
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1744,8 +1729,8 @@ MonoBehaviour:
   openAngle: 89
   degreesPerSecond: 210
   audioSource: {fileID: 351587926}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &351587926
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2348,8 +2333,8 @@ MonoBehaviour:
   openAngle: 89
   degreesPerSecond: 210
   audioSource: {fileID: 449362000}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &449362000
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2965,8 +2950,8 @@ MonoBehaviour:
   openAngle: 89
   degreesPerSecond: 210
   audioSource: {fileID: 613152683}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &613152683
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3155,7 +3140,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 3879789}
   lampAudio: {fileID: 2099124003}
   intactVisual: {fileID: 1388879715}
@@ -3180,7 +3168,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &655806440
 GameObject:
@@ -3246,7 +3234,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 798550378}
   lampAudio: {fileID: 2099124004}
   intactVisual: {fileID: 1764648745}
@@ -3271,7 +3262,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &785175651
 GameObject:
@@ -3640,7 +3631,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1761458042}
   lampAudio: {fileID: 2099124005}
   intactVisual: {fileID: 1659593820}
@@ -3665,7 +3659,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &857060114
 GameObject:
@@ -3731,7 +3725,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1733935469}
   lampAudio: {fileID: 2099124006}
   intactVisual: {fileID: 1896825631}
@@ -3756,7 +3753,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &873995566
 GameObject:
@@ -3906,8 +3903,8 @@ MonoBehaviour:
   openAngle: -89
   degreesPerSecond: 210
   audioSource: {fileID: 935347723}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &935347723
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4167,8 +4164,8 @@ MonoBehaviour:
   openAngle: -89
   degreesPerSecond: 210
   audioSource: {fileID: 1006542386}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &1006542386
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4536,7 +4533,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1376792483}
   lampAudio: {fileID: 2099124007}
   intactVisual: {fileID: 2144821352}
@@ -4561,7 +4561,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &1109774791
 GameObject:
@@ -4912,7 +4912,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1109774794}
   lampAudio: {fileID: 2099124008}
   intactVisual: {fileID: 583976855}
@@ -4937,7 +4940,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &1147575424
 GameObject:
@@ -5138,7 +5141,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 2066857204}
   lampAudio: {fileID: 2099124009}
   intactVisual: {fileID: 383259033}
@@ -5163,7 +5169,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &1312748695
 GameObject:
@@ -5229,7 +5235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 189008333}
   lampAudio: {fileID: 2099124010}
   intactVisual: {fileID: 465477913}
@@ -5254,7 +5263,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1001 &1315594837
 PrefabInstance:
@@ -5488,8 +5497,8 @@ MonoBehaviour:
   openAngle: 89
   degreesPerSecond: 210
   audioSource: {fileID: 1363866255}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &1363866255
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5846,8 +5855,8 @@ MonoBehaviour:
   openAngle: -89
   degreesPerSecond: 210
   audioSource: {fileID: 1390536401}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &1390536401
 AudioSource:
   m_ObjectHideFlags: 0
@@ -6184,7 +6193,7 @@ MonoBehaviour:
   sprintSpeed: 4.0444446
   crouchSpeed: 1.2222223
   crouchHeight: 1.15
-  jumpHeight: 1.2
+  jumpHeight: 0.85
   mouseSensitivity: 0.12
   movementAudioSource: {fileID: 1501000015}
   footstepClips:
@@ -6324,7 +6333,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -6635,8 +6644,8 @@ MonoBehaviour:
       m_Calls: []
   radius: 20
   width: 3
-  startColor: {r: 1, g: 0.67, b: 0.24, a: 1}
-  endColor: {r: 0.46, g: 1, b: 0.74, a: 1}
+  startColor: {r: 1, g: 0.12, b: 0.12, a: 1}
+  endColor: {r: 0.16, g: 1, b: 0.24, a: 1}
   cancelFadeSeconds: 0.25
   completeFadeSeconds: 0.45
 --- !u!114 &1502000280
@@ -6662,7 +6671,8 @@ MonoBehaviour:
   heldBoxHeight: -0.29
   lampOutlineShader: {fileID: 4800000, guid: 244f6e4f4ba443ecb8445f68eac71d60, type: 3}
   lampOutlineColor: {r: 1, g: 0.86, b: 0.1, a: 1}
-  lampOutlineWidth: 0.018
+  lampOutlineWidth: 2
+  boxOutlineWidth: 0.014
 --- !u!1 &1515404972 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8934777400606672865, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
@@ -6732,7 +6742,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1318916458}
   lampAudio: {fileID: 2099124011}
   intactVisual: {fileID: 1959536381}
@@ -6757,7 +6770,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &1614577842
 GameObject:
@@ -7898,7 +7911,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 1060077809}
   lampAudio: {fileID: 2099124012}
   intactVisual: {fileID: 1315594840}
@@ -7923,7 +7939,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1 &1803684509
 GameObject:
@@ -7977,8 +7993,8 @@ MonoBehaviour:
   openAngle: -89
   degreesPerSecond: 210
   audioSource: {fileID: 1813696435}
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
+  closeSound: {fileID: 8300000, guid: 08d9ee29d9264a34b2d909953f023593, type: 3}
 --- !u!82 &1813696435
 AudioSource:
   m_ObjectHideFlags: 0
@@ -8407,7 +8423,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBroken: 0
-  secondsToRepair: 2.5
+  secondsToRemove: 1
+  secondsToRepair: 1
+  turningSound: {fileID: 8300000, guid: 6f1e989020664250b73c0d6b29c21ccb, type: 3}
+  removedSound: {fileID: 8300000, guid: a3eda22e940742a387955b81f0740123, type: 3}
   lampLight: {fileID: 873995569}
   lampAudio: {fileID: 2099124013}
   intactVisual: {fileID: 577026636}
@@ -8432,7 +8451,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.15, y: 0.42, z: 0.15}
+  m_Size: {x: 0.18, y: 0.46, z: 0.18}
   m_Center: {x: 0, y: 0.14500001, z: 0}
 --- !u!1001 &1959536378
 PrefabInstance:

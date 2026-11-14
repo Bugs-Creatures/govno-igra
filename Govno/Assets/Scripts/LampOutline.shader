@@ -5,6 +5,7 @@ Shader "Govno/Lamp Outline"
         _OutlineColor("Color", Color) = (1, 0.86, 0.1, 1)
         _OutlineWidth("Width", Float) = 0.018
         [HideInInspector] _OutlineCenter("Mesh Center", Vector) = (0, 0, 0, 0)
+        [HideInInspector] _OutlineOffset("Screen Direction", Vector) = (0, 0, 0, 0)
         [HideInInspector] _OutlineCull("Cull", Float) = 1
         [HideInInspector] _OutlineZTest("Depth Test", Float) = 4
         [HideInInspector] _OutlineColorMask("Color Mask", Float) = 15
@@ -42,6 +43,7 @@ Shader "Govno/Lamp Outline"
                 half4 _OutlineColor;
                 float _OutlineWidth;
                 float4 _OutlineCenter;
+                float4 _OutlineOffset;
             CBUFFER_END
 
             struct Varyings
@@ -56,7 +58,7 @@ Shader "Govno/Lamp Outline"
                 float3 positionWS = TransformObjectToWorld(positionOS);
                 // Mesh centers can differ from their pivots, especially on hinged parts.
                 float3 radialWS = SafeNormalize(positionWS - TransformObjectToWorld(_OutlineCenter.xyz));
-                #if !defined(SILHOUETTE_MASK)
+                #if !defined(SILHOUETTE_MASK) && !defined(OBJECT_SILHOUETTE)
                     positionWS += radialWS * _OutlineWidth;
                 #endif
 
@@ -67,12 +69,11 @@ Shader "Govno/Lamp Outline"
                     float bias = _OutlineWidth * max(1.0, rcp(max(abs(view.y), 0.12)));
                     positionWS += view * bias;
                 #endif
-                #if defined(OBJECT_SILHOUETTE)
-                    // Keep the bottom edge visible where the object touches a surface.
-                    positionWS += GetWorldSpaceNormalizeViewDir(positionWS) * _OutlineWidth;
-                #endif
-
                 output.positionCS = TransformWorldToHClip(positionWS);
+                #if defined(OBJECT_SILHOUETTE)
+                    output.positionCS.xy += 2.0 * _OutlineOffset.xy * _OutlineWidth
+                        * output.positionCS.w / _ScaledScreenParams.xy;
+                #endif
                 output.positionOS = TransformWorldToObject(positionWS);
                 return output;
             }

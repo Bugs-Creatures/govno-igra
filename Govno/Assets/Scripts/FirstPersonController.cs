@@ -10,7 +10,7 @@ public sealed class FirstPersonController : MonoBehaviour
     [SerializeField, Min(0f)] private float sprintSpeed = 4.0444444f;
     [SerializeField, Min(0f)] private float crouchSpeed = 1.2222223f;
     [SerializeField, Min(0.1f)] private float crouchHeight = 1.15f;
-    [SerializeField, Min(0f)] private float jumpHeight = 1.2f;
+    [SerializeField, Min(0f)] private float jumpHeight = 0.85f;
     [SerializeField, Min(0f)] private float mouseSensitivity = 0.12f;
 
     [Header("Movement Audio")]

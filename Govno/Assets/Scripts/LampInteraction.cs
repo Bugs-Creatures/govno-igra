@@ -21,12 +21,12 @@ public sealed class LampInteraction : MonoBehaviour
     private float heldBoxHeight = -0.29f;
     [SerializeField] private Shader lampOutlineShader;
     [SerializeField, ColorUsage(false)] private Color lampOutlineColor = new(1f, 0.86f, 0.1f);
-    [SerializeField, Min(0f)] private float lampOutlineWidth = 0.018f;
+    [SerializeField, Min(0f), Tooltip("Lamp outline width in pixels.")] private float lampOutlineWidth = 2f;
+    [SerializeField, Min(0f)] private float boxOutlineWidth = 0.014f;
 
     private static readonly int OutlineColorId = Shader.PropertyToID("_OutlineColor");
     private static readonly int OutlineWidthId = Shader.PropertyToID("_OutlineWidth");
     private static readonly int OutlineCullId = Shader.PropertyToID("_OutlineCull");
-    private static readonly int OutlineZTestId = Shader.PropertyToID("_OutlineZTest");
     private static readonly int OutlineColorMaskId = Shader.PropertyToID("_OutlineColorMask");
     private static readonly int OutlineStencilRefId = Shader.PropertyToID("_OutlineStencilRef");
     private static readonly int OutlineStencilWriteMaskId = Shader.PropertyToID("_OutlineStencilWriteMask");
@@ -69,14 +69,14 @@ public sealed class LampInteraction : MonoBehaviour
             boxOutlineMaterial.SetFloat(OutlineCullId, (float)UnityEngine.Rendering.CullMode.Back);
             outlineSilhouetteMask = new Material(outlineMaterial) { renderQueue = outlineMaterial.renderQueue - 1 };
             outlineSilhouetteMask.EnableKeyword("SILHOUETTE_MASK");
-            outlineSilhouetteMask.SetFloat(OutlineCullId, (float)UnityEngine.Rendering.CullMode.Off);
-            outlineSilhouetteMask.SetFloat(OutlineZTestId, (float)UnityEngine.Rendering.CompareFunction.Always);
+            outlineSilhouetteMask.SetFloat(OutlineCullId, (float)UnityEngine.Rendering.CullMode.Back);
             outlineSilhouetteMask.SetFloat(OutlineColorMaskId, 0f);
             outlineSilhouetteMask.SetFloat(OutlineStencilRefId, 1f);
             outlineSilhouetteMask.SetFloat(OutlineStencilWriteMaskId, 1f);
             outlineSilhouetteMask.SetFloat(OutlineStencilPassId, (float)UnityEngine.Rendering.StencilOp.Replace);
             outlineMaterial.SetFloat(OutlineStencilRefId, 1f);
             outlineMaterial.SetFloat(OutlineStencilCompareId, (float)UnityEngine.Rendering.CompareFunction.NotEqual);
+            outlineMaterial.SetFloat(OutlineCullId, (float)UnityEngine.Rendering.CullMode.Back);
             outlineMaterial.EnableKeyword("OBJECT_SILHOUETTE");
         }
 
@@ -157,7 +157,7 @@ public sealed class LampInteraction : MonoBehaviour
             }
         }
 
-        CeilingLamp brokenLamp = aimedLamp != null && aimedLamp.IsBroken ? aimedLamp : null;
+        CeilingLamp brokenLamp = aimedLamp != null && aimedLamp.isActiveAndEnabled && aimedLamp.IsBroken ? aimedLamp : null;
         CeilingLamp lamp = heldBox != null && heldBox.HasBulbs ? brokenLamp : null;
         SetOutline(lamp, box);
         reticle.Filled = restingReticleFilled || box != null || lamp != null || door != null;
@@ -170,15 +170,18 @@ public sealed class LampInteraction : MonoBehaviour
             else
             {
                 repairElapsed += Time.deltaTime;
-                float progress = repairElapsed / repairTarget.SecondsToRepair;
+                float progress = repairElapsed / repairTarget.SecondsForCurrentStage;
                 repairProgress.ShowProgress(progress);
                 if (progress >= 1f)
                 {
-                    bool repaired = repairTarget.TryRepair(heldBox);
-                    StopRepair(repaired);
-                    if (repaired)
+                    bool removing = repairTarget.HasBrokenBulb;
+                    bool completed = removing ? repairTarget.TryRemoveBrokenBulb() : repairTarget.TryRepair(heldBox);
+                    StopRepair(completed);
+                    if (completed && !removing)
+                    {
                         SetOutline(null, null);
-                    reticle.Filled = restingReticleFilled;
+                        reticle.Filled = restingReticleFilled;
+                    }
                 }
                 return;
             }
@@ -197,6 +200,7 @@ public sealed class LampInteraction : MonoBehaviour
         else if (lamp != null)
         {
             repairTarget = lamp;
+            repairTarget.StartTurningSound();
             repairProgress.ShowProgress(0f);
         }
         else if (door != null)
@@ -211,10 +215,9 @@ public sealed class LampInteraction : MonoBehaviour
             return;
 
         if (lampOutlineWidth <= 0f)
-        {
             lamp = null;
+        if (boxOutlineWidth <= 0f)
             box = null;
-        }
         if (lamp != null)
         {
             outlineMaterial.SetColor(OutlineColorId, lampOutlineColor);
@@ -223,7 +226,7 @@ public sealed class LampInteraction : MonoBehaviour
         if (box != null)
         {
             boxOutlineMaterial.SetColor(OutlineColorId, lampOutlineColor);
-            boxOutlineMaterial.SetFloat(OutlineWidthId, lampOutlineWidth);
+            boxOutlineMaterial.SetFloat(OutlineWidthId, boxOutlineWidth);
         }
 
         if (outlinedLamp != lamp)
@@ -276,6 +279,8 @@ public sealed class LampInteraction : MonoBehaviour
         if (reticle != null)
             reticle.Filled = restingReticleFilled;
 
+        if (repairTarget != null)
+            repairTarget.StopTurningSound();
         repairTarget = null;
         repairElapsed = 0f;
         if (repairProgress != null)
@@ -304,6 +309,7 @@ public sealed class LampInteraction : MonoBehaviour
     {
         if (repairTarget == null)
             return;
+        repairTarget.StopTurningSound();
 
         repairTarget = null;
         repairElapsed = 0f;
