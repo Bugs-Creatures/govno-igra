@@ -1,44 +1,78 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace UntilSix.Monster
 {
     [DisallowMultipleComponent]
+    [DefaultExecutionOrder(-10)]
     [RequireComponent(typeof(NavMeshAgent))]
     public sealed class NavMeshMonsterMovement : MonsterMovement
     {
-        private const float DoorLookAhead = 0.65f;
-        private const float FootClearance = 0.1f;
+        private const float DoorOpeningLeadTime = 0.45f;
+        private const float DoorBendLeadTime = 0.60f;
+        private const float DoorBendTransitionTime = 0.45f;
+        private const float WaypointTolerance = 0.07f;
 
-        [SerializeField, Min(0.1f)] private float walkSpeed = 2.3f;
-        [SerializeField, Min(0.1f)] private float chaseSpeed = 4.8f;
+        [SerializeField, Min(0.1f)] private float walkSpeed = 0.90f;
+        [SerializeField, Min(0.1f)] private float chaseSpeed = 2.55f;
 
-        private readonly RaycastHit[] doorHits = new RaycastHit[16];
         private NavMeshAgent agent;
-        private CottageDoor waitingForDoor;
+        private MonsterDoorway[] doorways;
+        private MonsterRoute planner;
+        private readonly List<Vector3> route = new List<Vector3>();
+        private int routeIndex;
+        private bool lastChasing;
         private Vector3 lastDestination;
         private float nextRepathAt;
         private bool hasDestination;
 
+        public float CrouchAmount { get; private set; }
+        public float WalkSpeed => walkSpeed;
+        public float TravelSpeed => agent != null && agent.isOnNavMesh && !agent.isStopped
+            ? Vector3.ProjectOnPlane(agent.velocity, Vector3.up).magnitude
+            : 0f;
+
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
-            // Apply each navigation step only after checking the moving door colliders.
-            agent.updatePosition = false;
+            doorways = FindObjectsByType<MonsterDoorway>();
+            planner = new MonsterRoute(agent, doorways, FindObjectsByType<MonsterCorridorWaypoint>());
         }
 
         private void OnDisable() => Stop();
 
         public override MoveResult MoveTowards(Vector3 destination, float deltaTime) =>
-            Move(destination, walkSpeed, 0.18f);
+            Move(destination, chasing: false, stoppingDistance: 0.18f);
 
         public override MoveResult ChaseTowards(Vector3 destination, float deltaTime) =>
-            Move(destination, chaseSpeed, 0.85f);
+            Move(destination, chasing: true, stoppingDistance: 0.85f);
+
+        private void Update()
+        {
+            Vector3 position = DoorProbePosition;
+            Vector3 towardsCorner = hasDestination && agent.isOnNavMesh && !agent.isStopped
+                ? agent.steeringTarget - transform.position
+                : Vector3.zero;
+            float bendLead = Mathf.Max(0.8f, agent.speed * DoorBendLeadTime);
+            float lookAhead = Mathf.Min(towardsCorner.magnitude, bendLead);
+            Vector3 direction = towardsCorner.normalized;
+            float targetBend = 0f;
+            foreach (MonsterDoorway doorway in doorways)
+            {
+                if (doorway != null && doorway.isActiveAndEnabled &&
+                    doorway.TryGetEntryDistance(position, direction, lookAhead, out float entry))
+                    targetBend = Mathf.Max(targetBend, Mathf.SmoothStep(1f, 0f, entry / bendLead));
+            }
+
+            CrouchAmount = Mathf.MoveTowards(CrouchAmount, targetBend, Time.deltaTime / DoorBendTransitionTime);
+        }
+
+        private Vector3 DoorProbePosition => transform.position + Vector3.up * (0.45f - agent.baseOffset);
 
         public override void Stop()
         {
             hasDestination = false;
-            waitingForDoor = null;
             if (agent != null && agent.isOnNavMesh)
             {
                 agent.isStopped = true;
@@ -46,24 +80,25 @@ namespace UntilSix.Monster
             }
         }
 
-        private MoveResult Move(Vector3 destination, float speed, float stoppingDistance)
+        private MoveResult Move(Vector3 destination, bool chasing, float stoppingDistance)
         {
             if (!agent.isOnNavMesh)
                 return MoveResult.Unreachable;
 
-            agent.speed = speed;
-            agent.stoppingDistance = stoppingDistance;
+            agent.speed = chasing ? chaseSpeed : walkSpeed;
             bool destinationMoved = (destination - lastDestination).sqrMagnitude > 0.04f;
-            if (!hasDestination || (destinationMoved && Time.time >= nextRepathAt))
+            if (!hasDestination || lastChasing != chasing || (destinationMoved && Time.time >= nextRepathAt))
             {
-                if (!NavMesh.SamplePosition(destination, out NavMeshHit hit, 1.35f, agent.areaMask) ||
-                    !agent.SetDestination(hit.position))
+                routeIndex = 0;
+                if (!planner.Build(agent.nextPosition, destination, !chasing, route) ||
+                    !SetRouteDestination(stoppingDistance))
                 {
                     Stop();
                     return MoveResult.Unreachable;
                 }
 
                 hasDestination = true;
+                lastChasing = chasing;
                 lastDestination = destination;
                 nextRepathAt = Time.time + 0.15f;
             }
@@ -76,93 +111,39 @@ namespace UntilSix.Monster
                 return MoveResult.Unreachable;
             }
 
-            Vector3 towardsCorner = agent.steeringTarget - transform.position;
-            CottageDoor door = FindDoor(towardsCorner, Mathf.Max(DoorLookAhead, stoppingDistance + 0.05f), out _);
-            if (WaitForDoor(door))
-                return MoveResult.Moving;
-
             agent.isStopped = false;
-            return agent.remainingDistance <= stoppingDistance + 0.05f
+            bool intermediate = routeIndex < route.Count - 1;
+            if (intermediate && agent.remainingDistance <= WaypointTolerance)
+            {
+                routeIndex++;
+                if (!SetRouteDestination(stoppingDistance))
+                {
+                    Stop();
+                    return MoveResult.Unreachable;
+                }
+
+                return MoveResult.Moving;
+            }
+
+            Vector3 towardsCorner = agent.steeringTarget - transform.position;
+            float lookAhead = Mathf.Min(towardsCorner.magnitude, agent.speed * DoorOpeningLeadTime);
+            foreach (MonsterDoorway doorway in doorways)
+            {
+                if (doorway != null && doorway.isActiveAndEnabled)
+                    doorway.OpenAlong(DoorProbePosition, towardsCorner.normalized, lookAhead);
+            }
+
+            return !intermediate && agent.remainingDistance <= stoppingDistance + 0.05f
                 ? MoveResult.Arrived
                 : MoveResult.Moving;
         }
 
-        private void LateUpdate()
+        private bool SetRouteDestination(float stoppingDistance)
         {
-            if (!agent.isOnNavMesh)
-                return;
-
-            Vector3 nextPosition = agent.nextPosition;
-            Vector3 step = nextPosition - transform.position;
-            if (waitingForDoor != null)
-            {
-                agent.nextPosition = transform.position;
-                return;
-            }
-
-            CottageDoor door = FindDoor(step, step.magnitude, out float hitDistance);
-            if (door != null)
-            {
-                agent.isStopped = true;
-                WaitForDoor(door);
-                nextPosition = transform.position + step.normalized * Mathf.Max(0f, hitDistance - 0.01f);
-                agent.nextPosition = nextPosition;
-            }
-
-            transform.position = nextPosition;
-        }
-
-        private bool WaitForDoor(CottageDoor door)
-        {
-            if (waitingForDoor == null)
-                waitingForDoor = door;
-
-            if (waitingForDoor == null || !waitingForDoor.isActiveAndEnabled || waitingForDoor.IsFullyOpen)
-            {
-                waitingForDoor = null;
-                return false;
-            }
-
-            agent.isStopped = true;
-            waitingForDoor.Open();
-            return true;
-        }
-
-        private CottageDoor FindDoor(Vector3 offset, float maxDistance, out float nearestDistance)
-        {
-            nearestDistance = float.PositiveInfinity;
-            float length = offset.magnitude;
-            if (length <= 0.0001f)
-                return null;
-
-            float radius = agent.radius;
-            Vector3 feet = transform.position - Vector3.up * agent.baseOffset;
-            Vector3 bottom = feet + Vector3.up * (radius + FootClearance);
-            Vector3 top = feet + Vector3.up * Mathf.Max(radius + FootClearance, agent.height - radius);
-            Vector3 direction = offset / length;
-            float distance = Mathf.Min(length, maxDistance);
-            RaycastHit[] hits = doorHits;
-            int count = Physics.CapsuleCastNonAlloc(bottom, top, radius, direction, hits, distance,
-                Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-            if (count == hits.Length)
-            {
-                hits = Physics.CapsuleCastAll(bottom, top, radius, direction, distance,
-                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
-                count = hits.Length;
-            }
-
-            CottageDoor nearest = null;
-            for (int i = 0; i < count; i++)
-            {
-                RaycastHit hit = hits[i];
-                if (hit.distance >= nearestDistance || !hit.collider.TryGetComponent(out CottageDoor door))
-                    continue;
-
-                nearest = door;
-                nearestDistance = hit.distance;
-            }
-
-            return nearest;
+            bool intermediate = routeIndex < route.Count - 1;
+            agent.stoppingDistance = intermediate ? 0f : stoppingDistance;
+            agent.autoBraking = !intermediate;
+            return agent.SetDestination(route[routeIndex]);
         }
     }
 }

@@ -7,7 +7,9 @@ namespace UntilSix.Monster
     {
         [SerializeField] private LampLightZone[] zones = new LampLightZone[0];
 
-        public bool IsInLight => IsLitAt(transform.position);
+        private Vector3 ZonePosition => transform.position + Vector3.up * 0.25f;
+
+        public bool IsInLight => IsLitAt(ZonePosition);
 
         public bool IsLitAt(Vector3 position)
         {

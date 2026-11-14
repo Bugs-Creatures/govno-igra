@@ -11,7 +11,8 @@ Shader "UntilSix/Monster Footprint"
         Tags { "RenderPipeline"="UniversalPipeline" "Queue"="Transparent-10" "RenderType"="Transparent" }
         Pass
         {
-            Blend SrcAlpha OneMinusSrcAlpha
+            Blend DstColor Zero
+            ColorMask RGB
             Cull Off
             ZWrite Off
             ZTest LEqual
@@ -44,7 +45,9 @@ Shader "UntilSix/Monster Footprint"
             half4 Frag(Varyings input) : SV_Target
             {
                 half4 print = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
-                return half4(print.rgb, print.a * _Opacity);
+                half dirt = lerp(0.26h, 0.52h, saturate(print.r * 3.0h));
+                half3 stain = dirt * half3(1.0h, 0.77h, 0.58h);
+                return half4(lerp(half3(1, 1, 1), stain, print.a * _Opacity), 1);
             }
             ENDHLSL
         }

@@ -15,8 +15,6 @@ public sealed class CottageDoor : MonoBehaviour
     private float angle;
     private bool wantsOpen;
 
-    public bool IsFullyOpen => wantsOpen && angle == openAngle;
-
     private void Awake()
     {
         body = GetComponent<Rigidbody>();

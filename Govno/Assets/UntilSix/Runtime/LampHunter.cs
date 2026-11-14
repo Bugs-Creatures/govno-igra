@@ -22,6 +22,10 @@ namespace UntilSix.Monster
         [SerializeField, Min(0f)] private float windUpSeconds = 0.5f;
         [SerializeField, Min(0.05f)] private float retrySeconds = 0.25f;
         [SerializeField, Min(0.05f)] private float unreachableRetrySeconds = 2f;
+        [Header("Chase Audio")]
+        [SerializeField] private AudioSource chaseMusicSource;
+        [SerializeField] private AudioClip chaseScream;
+        [SerializeField] private AudioClip chaseMusic;
 
         private readonly List<MonsterLampTarget> candidates = new List<MonsterLampTarget>();
         private readonly Dictionary<MonsterLampTarget, float> retryAfter = new Dictionary<MonsterLampTarget, float>();
@@ -29,6 +33,7 @@ namespace UntilSix.Monster
         private float nextSelectionAt;
         private float nextBreakAt;
         private float strikeAt;
+        private bool playingChaseScream;
         private MonsterLampTarget lastBrokenLamp;
 
         public MonsterLampTarget CurrentTarget { get; private set; }
@@ -49,7 +54,11 @@ namespace UntilSix.Monster
         private void Update()
         {
             if (movement == null || !movement.isActiveAndEnabled)
+            {
+                if (IsPursuingPlayer)
+                    ResetTarget(0f);
                 return;
+            }
 
             if (player != null && player.isActiveAndEnabled && !player.IsInLight)
             {
@@ -58,6 +67,15 @@ namespace UntilSix.Monster
                     movement.Stop();
                     CurrentTarget = null;
                     phase = Phase.PursuePlayer;
+                    playingChaseScream = chaseScream != null && chaseMusicSource != null &&
+                        chaseMusicSource.isActiveAndEnabled;
+                    PlayChaseAudio(playingChaseScream ? chaseScream : chaseMusic, !playingChaseScream);
+                }
+                else if (playingChaseScream && !AudioListener.pause &&
+                    (chaseMusicSource == null || !chaseMusicSource.isPlaying))
+                {
+                    playingChaseScream = false;
+                    PlayChaseAudio(chaseMusic, true);
                 }
 
                 movement.ChaseTowards(player.transform.position, Time.deltaTime);
@@ -142,12 +160,26 @@ namespace UntilSix.Monster
 
         private void ResetTarget(float delay)
         {
+            if (IsPursuingPlayer && chaseMusicSource != null)
+                chaseMusicSource.Stop();
+            playingChaseScream = false;
+
             if (movement != null)
                 movement.Stop();
 
             CurrentTarget = null;
             phase = Phase.SelectTarget;
             nextSelectionAt = Time.time + delay;
+        }
+
+        private void PlayChaseAudio(AudioClip clip, bool loop)
+        {
+            if (chaseMusicSource == null || !chaseMusicSource.isActiveAndEnabled || clip == null)
+                return;
+
+            chaseMusicSource.clip = clip;
+            chaseMusicSource.loop = loop;
+            chaseMusicSource.Play();
         }
     }
 }
