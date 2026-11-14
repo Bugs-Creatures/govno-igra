@@ -15,6 +15,8 @@ public sealed class CottageDoor : MonoBehaviour
     private float angle;
     private bool wantsOpen;
 
+    public bool IsFullyOpen => wantsOpen && angle == openAngle;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody>();
@@ -23,9 +25,16 @@ public sealed class CottageDoor : MonoBehaviour
         closedRotation = Quaternion.AngleAxis(-angle, Vector3.up) * transform.localRotation;
     }
 
-    public void Toggle()
+    public void Toggle() => SetOpen(!wantsOpen);
+
+    public void Open() => SetOpen(true);
+
+    private void SetOpen(bool open)
     {
-        wantsOpen = !wantsOpen;
+        if (wantsOpen == open)
+            return;
+
+        wantsOpen = open;
         AudioClip sound = wantsOpen ? openSound : closeSound;
         if (audioSource != null && sound != null)
         {
