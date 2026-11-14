@@ -165,6 +165,7 @@ public sealed class BulbBox : MonoBehaviour
         if (boxAudio == null)
         {
             boxAudio = gameObject.AddComponent<AudioSource>();
+            boxAudio.outputAudioMixerGroup = GameAudioSettings.Current?.AudioOutput;
             boxAudio.playOnAwake = false;
             boxAudio.spatialBlend = 1f;
             boxAudio.dopplerLevel = 0f;

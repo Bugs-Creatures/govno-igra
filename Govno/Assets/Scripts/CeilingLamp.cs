@@ -141,6 +141,7 @@ public sealed class CeilingLamp : MonoBehaviour
     private AudioSource CreateRepairAudio()
     {
         AudioSource source = gameObject.AddComponent<AudioSource>();
+        source.outputAudioMixerGroup = GameAudioSettings.Current?.AudioOutput;
         source.playOnAwake = false;
         source.spatialBlend = 1f;
         source.dopplerLevel = 0f;

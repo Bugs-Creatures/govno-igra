@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [DisallowMultipleComponent]
 [DefaultExecutionOrder(-100)]
 public sealed class GameAudioSettings : MonoBehaviour
 {
     [SerializeField, Range(0f, 1f)] private float masterVolume = 1f;
+    [SerializeField] private AudioMixerGroup audioOutput;
 
     [Header("Footsteps")]
     [SerializeField, Range(0f, 1f)] private float cleanFootstepsVolume = 0.3f;
@@ -51,6 +53,7 @@ public sealed class GameAudioSettings : MonoBehaviour
     private readonly List<Renderer> rainWindows = new();
 
     public static GameAudioSettings Current { get; private set; }
+    public AudioMixerGroup AudioOutput => audioOutput;
 
     public float FootstepsVolume(bool creaky) => masterVolume *
         (creaky ? creakyFootstepsVolume : cleanFootstepsVolume);
@@ -107,6 +110,7 @@ public sealed class GameAudioSettings : MonoBehaviour
         if (rainSource == null)
         {
             rainSource = gameObject.AddComponent<AudioSource>();
+            rainSource.outputAudioMixerGroup = audioOutput;
             rainSource.playOnAwake = false;
             rainSource.loop = true;
             rainSource.spatialBlend = 0f;
