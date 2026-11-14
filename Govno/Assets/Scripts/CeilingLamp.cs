@@ -8,13 +8,25 @@ public sealed class CeilingLamp : MonoBehaviour
     [SerializeField] private Renderer diffuser;
     [SerializeField] private Material workingMaterial;
     [SerializeField] private Material brokenMaterial;
+    [SerializeField] private bool useLampForRendering = true;
 
     private MeshRenderer[] outlineRenderers;
 
     public bool IsBroken => isBroken;
+    public bool IsWorking => isActiveAndEnabled && !isBroken;
     public float SecondsToRepair => Mathf.Max(0.01f, secondsToRepair);
 
     private void Awake()
+    {
+        ApplyState();
+    }
+
+    private void OnEnable()
+    {
+        ApplyState();
+    }
+
+    private void OnDisable()
     {
         ApplyState();
     }
@@ -78,7 +90,7 @@ public sealed class CeilingLamp : MonoBehaviour
     private void ApplyState()
     {
         if (lampLight != null)
-            lampLight.enabled = !isBroken;
+            lampLight.enabled = useLampForRendering && IsWorking;
         if (diffuser != null)
             diffuser.sharedMaterial = isBroken ? brokenMaterial : workingMaterial;
     }

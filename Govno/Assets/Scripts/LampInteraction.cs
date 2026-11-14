@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 [RequireComponent(typeof(FirstPersonController), typeof(CharacterController))]
 public sealed class LampInteraction : MonoBehaviour
@@ -21,6 +23,10 @@ public sealed class LampInteraction : MonoBehaviour
     private FirstPersonController player;
     private CharacterController playerCollider;
     private BulbBox heldBox;
+    private Camera heldItemCamera;
+    private List<Camera> cameraStack;
+    private int heldItemLayer = -1;
+    private int originalCameraMask;
     private CeilingLamp outlinedLamp;
     private Material outlineMaterial;
     private CeilingLamp repairTarget;
@@ -43,6 +49,41 @@ public sealed class LampInteraction : MonoBehaviour
         restingReticleFilled = reticle.Filled;
         if (lampOutlineShader != null)
             outlineMaterial = new Material(lampOutlineShader);
+
+        ConfigureHeldItemCamera();
+    }
+
+    private void ConfigureHeldItemCamera()
+    {
+        int layer = LayerMask.NameToLayer("Held Items");
+        var cameraData = viewCamera.GetUniversalAdditionalCameraData();
+        cameraStack = cameraData.cameraStack;
+        if (layer < 0 || cameraStack == null)
+        {
+            Debug.LogError("Held items need the Held Items layer and a URP base camera with stacking.", this);
+            return;
+        }
+
+        var cameraObject = new GameObject("Held Item Camera");
+        cameraObject.SetActive(false);
+        cameraObject.transform.SetParent(viewCamera.transform, false);
+        heldItemCamera = cameraObject.AddComponent<Camera>();
+        heldItemCamera.CopyFrom(viewCamera);
+        heldItemCamera.cullingMask = 1 << layer;
+        heldItemCamera.useOcclusionCulling = false;
+        heldItemCamera.enabled = false;
+
+        var overlayData = heldItemCamera.GetUniversalAdditionalCameraData();
+        overlayData.renderType = CameraRenderType.Overlay;
+        // The overlay camera clears depth so only the item's own geometry can occlude it.
+        overlayData.renderPostProcessing = false;
+        overlayData.requiresColorOption = CameraOverrideOption.Off;
+        overlayData.requiresDepthOption = CameraOverrideOption.Off;
+        cameraStack.Add(heldItemCamera);
+        originalCameraMask = viewCamera.cullingMask;
+        viewCamera.cullingMask &= ~heldItemCamera.cullingMask;
+        heldItemLayer = layer;
+        cameraObject.SetActive(true);
     }
 
     private void LateUpdate()
@@ -53,6 +94,8 @@ public sealed class LampInteraction : MonoBehaviour
         bool canAim = player.HasGameplayInput && primary != null;
         bool wantsToDrop = Application.isFocused && Keyboard.current?.gKey.wasPressedThisFrame == true;
         UpdateInteraction(canAim, primary?.wasPressedThisFrame == true, primary?.isPressed == true, wantsToDrop);
+        if (heldItemCamera != null)
+            heldItemCamera.enabled = heldBox != null;
     }
 
     private void UpdateInteraction(bool canAim, bool primaryPressed, bool primaryHeld, bool wantsToDrop)
@@ -112,7 +155,7 @@ public sealed class LampInteraction : MonoBehaviour
         if (box != null)
         {
             heldBox = box;
-            heldBox.PickUp(boxHoldPoint);
+            heldBox.PickUp(boxHoldPoint, heldItemLayer);
             reticle.Filled = restingReticleFilled;
         }
         else if (lamp != null)
@@ -186,6 +229,14 @@ public sealed class LampInteraction : MonoBehaviour
     {
         if (outlineMaterial != null)
             Destroy(outlineMaterial);
+
+        if (heldItemCamera != null)
+        {
+            cameraStack.Remove(heldItemCamera);
+            if (viewCamera != null)
+                viewCamera.cullingMask = originalCameraMask;
+            Destroy(heldItemCamera.gameObject);
+        }
     }
 
     private void StopRepair(bool completed)
@@ -223,7 +274,7 @@ public sealed class LampInteraction : MonoBehaviour
         velocity.y = 0f;
         float speed = player.IsGrounded ? velocity.magnitude : 0f;
         bobAmount = Mathf.Lerp(bobAmount, Mathf.Clamp01(speed / 4f) * 0.5f, blend);
-        bobPhase += speed * dt * 2.8f;
+        bobPhase += speed * dt * 1.4f;
 
         float yawRate = Mathf.DeltaAngle(0f, delta.y) / Mathf.Max(0.001f, dt);
         float pitchRate = Mathf.DeltaAngle(0f, delta.x) / Mathf.Max(0.001f, dt);

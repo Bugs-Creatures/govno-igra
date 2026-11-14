@@ -6,28 +6,44 @@ namespace UntilSix.Monster
     public sealed class LampLightZone : MonoBehaviour
     {
         [SerializeField] private Light source;
+        [SerializeField] private CeilingLamp fixture;
         [SerializeField, Min(0.1f)] private float radius = 2.65f;
         [SerializeField, Min(0.1f)] private float height = 3f;
+        [SerializeField] private bool useBox;
+        [SerializeField] private Bounds box = new Bounds(Vector3.up, new Vector3(3f, 2f, 3f));
 
         public bool ContainsLight(Vector3 worldPosition)
         {
-            if (!isActiveAndEnabled || source == null || !source.isActiveAndEnabled || source.intensity <= 0f)
+            if (!isActiveAndEnabled || !HasWorkingLamp())
                 return false;
 
             Vector3 offset = transform.InverseTransformPoint(worldPosition);
+            if (useBox)
+                return box.Contains(offset);
+
             return offset.y >= -0.15f && offset.y <= height &&
                    offset.x * offset.x + offset.z * offset.z <= radius * radius;
         }
+
+        private bool HasWorkingLamp() => fixture != null ? fixture.IsWorking :
+            source != null && source.isActiveAndEnabled;
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = ContainsLight(transform.position) ? Color.yellow : Color.gray;
             Matrix4x4 previous = Gizmos.matrix;
             Gizmos.matrix = transform.localToWorldMatrix;
-            DrawRing(0f);
-            DrawRing(height);
-            Gizmos.DrawLine(Vector3.right * radius, Vector3.right * radius + Vector3.up * height);
-            Gizmos.DrawLine(Vector3.left * radius, Vector3.left * radius + Vector3.up * height);
+            if (useBox)
+            {
+                Gizmos.DrawWireCube(box.center, box.size);
+            }
+            else
+            {
+                DrawRing(0f);
+                DrawRing(height);
+                Gizmos.DrawLine(Vector3.right * radius, Vector3.right * radius + Vector3.up * height);
+                Gizmos.DrawLine(Vector3.left * radius, Vector3.left * radius + Vector3.up * height);
+            }
             Gizmos.matrix = previous;
         }
 

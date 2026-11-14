@@ -7,19 +7,17 @@ namespace UntilSix.Monster
     {
         [SerializeField] private LampLightZone[] zones = new LampLightZone[0];
 
-        public bool IsInLight
-        {
-            get
-            {
-                Vector3 position = transform.position;
-                foreach (LampLightZone zone in zones)
-                {
-                    if (zone != null && zone.ContainsLight(position))
-                        return true;
-                }
+        public bool IsInLight => IsLitAt(transform.position);
 
-                return false;
+        public bool IsLitAt(Vector3 position)
+        {
+            foreach (LampLightZone zone in zones)
+            {
+                if (zone != null && zone.ContainsLight(position))
+                    return true;
             }
+
+            return false;
         }
     }
 }

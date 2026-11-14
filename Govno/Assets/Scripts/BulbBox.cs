@@ -5,11 +5,14 @@ public sealed class BulbBox : MonoBehaviour
 {
     private const float ThrowLiftSpeed = 1.85f;
     private const float ExtraThrowGravity = 0.65f;
+    private const float ObstacleClearance = 0.025f;
 
     [SerializeField] private GameObject[] bulbs;
 
     private Rigidbody body;
     private BoxCollider boxCollider;
+    private Renderer[] boxRenderers;
+    private int[] worldLayers;
     private RigidbodyInterpolation dropInterpolation;
     private int remaining;
     private bool inThrow;
@@ -21,6 +24,7 @@ public sealed class BulbBox : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
+        boxRenderers = GetComponentsInChildren<Renderer>(true);
         dropInterpolation = body.interpolation;
         remaining = bulbs.Length;
     }
@@ -35,7 +39,7 @@ public sealed class BulbBox : MonoBehaviour
         return true;
     }
 
-    public void PickUp(Transform hand)
+    public void PickUp(Transform hand, int heldItemLayer = -1)
     {
         inThrow = false;
         body.interpolation = RigidbodyInterpolation.None;
@@ -43,6 +47,14 @@ public sealed class BulbBox : MonoBehaviour
         boxCollider.enabled = false;
         transform.SetParent(hand, false);
         transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        if (heldItemLayer >= 0 && worldLayers == null)
+        {
+            worldLayers = new int[boxRenderers.Length];
+            for (int i = 0; i < boxRenderers.Length; i++)
+                worldLayers[i] = boxRenderers[i].gameObject.layer;
+            foreach (Renderer renderer in boxRenderers)
+                renderer.gameObject.layer = heldItemLayer;
+        }
         IsHeld = true;
     }
 
@@ -57,6 +69,12 @@ public sealed class BulbBox : MonoBehaviour
         transform.SetPositionAndRotation(releasePosition, rotation);
         body.position = releasePosition;
         body.rotation = rotation;
+        if (worldLayers != null)
+        {
+            for (int i = 0; i < boxRenderers.Length; i++)
+                boxRenderers[i].gameObject.layer = worldLayers[i];
+            worldLayers = null;
+        }
         boxCollider.enabled = true;
         Physics.IgnoreCollision(boxCollider, holder);
         body.isKinematic = false;
@@ -84,19 +102,22 @@ public sealed class BulbBox : MonoBehaviour
     {
         Transform player = holder.transform;
         Vector3 origin = player.TransformPoint(holder.center);
-        Vector3 toHand = transform.position - origin;
-        float distance = toHand.magnitude;
+        Vector3 offset = transform.position - origin;
+        float distance = offset.magnitude;
         if (distance < 0.001f)
             return origin;
 
-        Vector3 direction = toHand / distance;
-        Vector3 extents = Vector3.Scale(boxCollider.size * 0.5f, transform.lossyScale);
-        var hits = Physics.BoxCastAll(origin + rotation * boxCollider.center, extents, direction,
-            rotation, distance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+        Vector3 direction = offset / distance;
+        Vector3 scale = transform.lossyScale;
+        Vector3 halfExtents = Vector3.Scale(boxCollider.size * 0.5f,
+            new Vector3(Mathf.Abs(scale.x), Mathf.Abs(scale.y), Mathf.Abs(scale.z)));
+        Vector3 centerOffset = rotation * Vector3.Scale(boxCollider.center, scale);
+        var hits = Physics.BoxCastAll(origin + centerOffset, halfExtents, direction, rotation, distance,
+            Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
         foreach (RaycastHit hit in hits)
         {
             if (!hit.collider.transform.IsChildOf(player))
-                distance = Mathf.Min(distance, Mathf.Max(0f, hit.distance - 0.025f));
+                distance = Mathf.Min(distance, Mathf.Max(0f, hit.distance - ObstacleClearance));
         }
         return origin + direction * distance;
     }
