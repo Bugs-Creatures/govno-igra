@@ -8,7 +8,7 @@ namespace UntilSix.Monster
     [RequireComponent(typeof(NavMeshAgent), typeof(MonsterLightPresentation))]
     public sealed class MonsterJumpscare : MonoBehaviour
     {
-        private const float TriggerDistance = 1.1f;
+        private const float TriggerDistance = 1.65f;
         private const float CameraTurnSpeed = 720f;
         private const float FadeDuration = 0.2f;
         private const float BlackoutDuration = 0.5f;
