@@ -69,6 +69,7 @@ public sealed class LampInteraction : MonoBehaviour
     private Quaternion previousViewRotation;
     private bool restingReticleFilled;
     private bool reticleWasEnabled;
+    private bool jumpscareActive;
 
     private void Awake()
     {
@@ -279,6 +280,9 @@ public sealed class LampInteraction : MonoBehaviour
 
     private void UpdateLampHints(Ray aimRay, Collider targetCollider, CeilingLamp aimedLamp, bool canAim)
     {
+        if (jumpscareActive)
+            return;
+
         if (lightZones != null && hintCanvas != null && brokenLampHintSize > 0f)
             lightZones.FindBrokenLamps(nearbyBrokenLamps);
         else
@@ -377,11 +381,16 @@ public sealed class LampInteraction : MonoBehaviour
         return closest;
     }
 
-    private void OnDisable()
+    private void HideLampHints()
     {
         foreach (BrokenLampMarker marker in lampMarkers.Values)
             if (marker != null)
                 marker.enabled = false;
+    }
+
+    private void OnDisable()
+    {
+        HideLampHints();
         SetOutline(null, null);
         if (reticle != null)
             reticle.Filled = restingReticleFilled;
@@ -428,6 +437,8 @@ public sealed class LampInteraction : MonoBehaviour
 
     internal void BeginJumpscare()
     {
+        jumpscareActive = true;
+        HideLampHints();
         reticleWasEnabled = reticle.enabled;
         reticle.enabled = false;
         StopRepair(false);
@@ -437,6 +448,8 @@ public sealed class LampInteraction : MonoBehaviour
     }
 
     internal void RestoreReticle() => reticle.enabled = reticleWasEnabled;
+
+    internal void EndJumpscare() => jumpscareActive = false;
 
     internal BulbBox DropJumpscareBox()
     {

@@ -2025,8 +2025,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0.16}
-    m_Extent: {x: 2.9749994, y: 1.5500001, z: 2.4249995}
+    m_Center: {x: 0, y: -0.089999914, z: 0.20499992}
+    m_Extent: {x: 2.9749994, y: 1.6400001, z: 2.4699993}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -11491,7 +11491,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddb7a1232d3f13844b2d517c327c5b10, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NightClock
   hud: {fileID: 1501000022}
   secondsPerHour: 30
@@ -11951,8 +11951,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.86999995, y: 1.63, z: 1.31}
+    m_Center: {x: -0.087499976, y: 0, z: 0}
+    m_Extent: {x: 1.1725, y: 1.63, z: 1.31}
 --- !u!1 &1793049604
 GameObject:
   m_ObjectHideFlags: 0
@@ -12758,8 +12758,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.86999995, y: 1.6700001, z: 1.2849998}
+    m_Center: {x: -0.087499976, y: 0, z: 0}
+    m_Extent: {x: 1.1725, y: 1.6700001, z: 1.2849998}
 --- !u!1 &1927881949
 GameObject:
   m_ObjectHideFlags: 0
@@ -14787,8 +14787,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: -0.15}
-    m_Extent: {x: 2.9749994, y: 1.5499998, z: 2.7349997}
+    m_Center: {x: 0, y: 0, z: -0.22500014}
+    m_Extent: {x: 2.9749994, y: 1.5499998, z: 2.8099997}
 --- !u!1001 &2144821349
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -133,6 +133,8 @@ namespace UntilSix.Monster
             player.PlayScaredBreath(recoveryBreath, 0.5f);
             yield return Fade(1f, 0f, false);
             blackout.gameObject.SetActive(false);
+            if (lampInteraction != null)
+                lampInteraction.EndJumpscare();
             sequence = null;
         }
 
@@ -240,7 +242,10 @@ namespace UntilSix.Monster
             if (blackout != null)
                 blackout.gameObject.SetActive(false);
             if (lampInteraction != null)
+            {
                 lampInteraction.RestoreReticle();
+                lampInteraction.EndJumpscare();
+            }
             if (player != null)
             {
                 player.ViewCamera.fieldOfView = normalFieldOfView;
