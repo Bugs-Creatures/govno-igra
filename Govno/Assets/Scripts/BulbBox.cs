@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider))]
 public sealed class BulbBox : MonoBehaviour
 {
+    private const float StartupSilenceSeconds = 2f;
     private const float ThrowLiftSpeed = 1.85f;
     private const float ExtraThrowGravity = 0.65f;
     private const float ObstacleClearance = 0.025f;
@@ -172,7 +173,7 @@ public sealed class BulbBox : MonoBehaviour
 
     private void PlayBoxSound(AudioClip clip, float volume)
     {
-        if (clip == null || volume <= 0f)
+        if (Time.timeSinceLevelLoad < StartupSilenceSeconds || clip == null || volume <= 0f)
             return;
 
         if (boxAudio == null)

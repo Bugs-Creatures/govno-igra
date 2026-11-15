@@ -10,6 +10,7 @@ namespace UntilSix.Monster
         private static readonly int Opacity = Shader.PropertyToID("_Opacity");
 
         [SerializeField] private PlayerLightZones lightZones;
+        [SerializeField] private Transform furnitureRoot;
         [SerializeField] private GameObject body;
         [SerializeField] private AudioSource stepAudio;
         [SerializeField] private AudioClip[] stepClips;
@@ -108,7 +109,8 @@ namespace UntilSix.Monster
             SetHidden(!visible && InLight);
         }
 
-        internal bool CanStartJumpscare(Vector3 eye, Vector3 target) => !InLight && HasClearView(eye, target);
+        internal bool CanStartJumpscare(Vector3 eye, Vector3 target) =>
+            !InLight && HasClearView(eye, target, ignoreFurniture: true);
 
         private void SetHidden(bool value)
         {
@@ -154,12 +156,15 @@ namespace UntilSix.Monster
             return HasClearView(playerCamera.transform.position, position);
         }
 
-        private bool HasClearView(Vector3 eye, Vector3 position)
+        private bool HasClearView(Vector3 eye, Vector3 position, bool ignoreFurniture = false)
         {
             Vector3 direction = position - eye;
             foreach (RaycastHit hit in Physics.RaycastAll(eye, direction.normalized, direction.magnitude,
                          Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
             {
+                if (ignoreFurniture && furnitureRoot != null && hit.transform.IsChildOf(furnitureRoot))
+                    continue;
+
                 if (!hit.transform.IsChildOf(transform) &&
                     (lightZones == null || !hit.transform.IsChildOf(lightZones.transform)))
                     return false;

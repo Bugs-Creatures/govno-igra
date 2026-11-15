@@ -1,0 +1,17 @@
+{
+  "mesh_objects": 56,
+  "triangles": 5184,
+  "all_uv": true,
+  "materials": [
+    "VB_Iron",
+    "VB_Mattress",
+    "VB_Pillows",
+    "VB_Piping",
+    "VB_Wood"
+  ],
+  "dimensions_m": [
+    1.7722803354263306,
+    2.208999991416931,
+    1.393499760888517
+  ]
+}

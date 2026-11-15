@@ -21,10 +21,10 @@ namespace UntilSix.Monster
             this.corridors = corridors;
         }
 
-        public bool Build(Vector3 start, Vector3 goal, bool useCorridors, List<Vector3> route)
+        public bool Build(Vector3 start, Vector3 goal, bool useCorridors, float projectionRadius, List<Vector3> route)
         {
             route.Clear();
-            if (!Project(goal, 1.35f, out goal) || !Calculate(start, goal))
+            if (!Project(goal, projectionRadius, out goal) || !Calculate(start, goal))
                 return false;
 
             Vector3 origin = start;

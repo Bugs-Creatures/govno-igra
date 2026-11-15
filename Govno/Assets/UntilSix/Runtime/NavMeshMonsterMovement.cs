@@ -13,6 +13,8 @@ namespace UntilSix.Monster
         private const float DoorBendLeadTime = 0.60f;
         private const float DoorBendTransitionTime = 0.45f;
         private const float WaypointTolerance = 0.07f;
+        private const float PlayerProjectionRadius = 1.8f;
+        private const float LampProjectionRadius = 1.35f;
 
         [SerializeField, Min(0.1f)] private float walkSpeed = 0.90f;
         [SerializeField, Min(0.1f)] private float chaseSpeed = 2.55f;
@@ -46,7 +48,7 @@ namespace UntilSix.Monster
             Move(destination, chasing: false, stoppingDistance: 0.18f);
 
         public override MoveResult ChaseTowards(Vector3 destination, float deltaTime) =>
-            Move(destination, chasing: true, stoppingDistance: 0.85f);
+            Move(destination, chasing: true, stoppingDistance: 0.55f);
 
         private void Update()
         {
@@ -90,7 +92,8 @@ namespace UntilSix.Monster
             if (!hasDestination || lastChasing != chasing || (destinationMoved && Time.time >= nextRepathAt))
             {
                 routeIndex = 0;
-                if (!planner.Build(agent.nextPosition, destination, !chasing, route) ||
+                float projectionRadius = chasing ? PlayerProjectionRadius : LampProjectionRadius;
+                if (!planner.Build(agent.nextPosition, destination, !chasing, projectionRadius, route) ||
                     !SetRouteDestination(stoppingDistance))
                 {
                     Stop();
