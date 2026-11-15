@@ -1,0 +1,13 @@
+AmbientCG • CC0 1.0 • original PBR downloads in 1K (1024 × 1024).
+Base colors are graded for the cottage. URP maps pack metalness in R and inverse roughness in A.
+The same finish uses the same URP material across furniture, kitchen and bathroom.
+KnifeSteel mesh slot shares the Nickel material. Color variants share their source normal and packed map where applicable.
+
+Wood049: https://ambientcg.com/view?id=Wood049 — Walnut
+Metal032: https://ambientcg.com/view?id=Metal032 — Iron
+Metal034: https://ambientcg.com/view?id=Metal034 — Brass
+Metal049B: https://ambientcg.com/view?id=Metal049B — Nickel
+Porcelain001: https://ambientcg.com/view?id=Porcelain001 — Porcelain, Jade, Oxblood
+Leather027: https://ambientcg.com/view?id=Leather027 — Leather
+Fabric030: https://ambientcg.com/view?id=Fabric030 — Linen, BreadCrumb
+Fabric038: https://ambientcg.com/view?id=Fabric038 — Ochre, Wine, BreadCrust
