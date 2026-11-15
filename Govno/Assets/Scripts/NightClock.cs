@@ -11,10 +11,12 @@ public sealed class NightClock : MonoBehaviour
 {
     private const int HoursToSurvive = 6;
     private const int MinutesPerHour = 60;
-    private const float HudWidth = 252f;
+    private const float HudWidth = 224f;
     private const float BarWidth = 156f;
+    private const float HintFontSize = 14f;
     private static readonly float[] LightSpeeds = { 1f, 0.8f, 0.6f, 0.35f };
     private static readonly Vector2 TopRight = new(1f, 1f);
+    private static readonly Vector2 TopCenter = new(0.5f, 1f);
 
     [SerializeField] private Canvas hud;
     [SerializeField, Min(0.1f)] private float secondsPerHour = 30f;
@@ -52,16 +54,17 @@ public sealed class NightClock : MonoBehaviour
             return;
 
         var digitFont = Resources.Load<TMP_FontAsset>("NightClock/Clock Digits");
-        var labelFont = Resources.Load<TMP_FontAsset>("NightClock/Clock Labels");
-        panel = CreateRect("Night Clock", hud.transform, new Vector2(-24f, -20f), new Vector2(HudWidth, 112f));
+        var labelFont = Resources.Load<TMP_FontAsset>("NightClock/Menu and Hints");
+        if (labelFont == null)
+            labelFont = Resources.Load<TMP_FontAsset>("NightClock/Clock Labels");
+        panel = CreateRect("Night Clock", hud.transform, new Vector2(-18f, -20f), new Vector2(HudWidth, 112f), TopRight);
         clock = CreateLabel("Time", Vector2.zero, 36, 32f, digitFont);
-        status = CreateLabel("Light Status", new Vector2(0f, -40f), 22, 16f, labelFont);
-        stopped = CreateLabel("Broken Lamps Status", new Vector2(0f, -40f), 22, 16f, labelFont);
-        bar = CreateRect("Countdown", panel, new Vector2(0f, -67f), new Vector2(BarWidth, 4f));
+        clock.color = Color.white;
+        status = CreateHint("Light Status", labelFont);
+        stopped = CreateHint("Broken Lamps Status", labelFont);
+        bar = CreateRect("Countdown", panel, new Vector2(0f, -67f), new Vector2(BarWidth, 4f), TopCenter);
         AddImage(bar, new Color(0f, 0f, 0f, 0.55f));
-        barFill = CreateRect("Remaining", bar, Vector2.zero, new Vector2(BarWidth, 4f));
-        barFill.anchorMin = barFill.anchorMax = barFill.pivot = new Vector2(0f, 1f);
-        barFill.anchoredPosition = Vector2.zero;
+        barFill = CreateRect("Remaining", bar, Vector2.zero, new Vector2(BarWidth, 4f), TopCenter);
         AddImage(barFill, Color.white);
     }
 
@@ -150,10 +153,9 @@ public sealed class NightClock : MonoBehaviour
         }
 
         bool rewinding = !inLight && RewindThresholdReached;
-        clock.color = rewinding && !won ? new Color(1f, 0.55f, 0.49f) : Color.white;
         bool resetting = inLight && RewindThresholdReached;
         status.gameObject.SetActive(won || !inLight || resetting);
-        status.text = won ? "Вы пережили ночь" : inLight ? "Оставайтесь на свету" : "В темноте опасно";
+        status.text = won ? "Вы пережили ночь" : inLight ? "Оставайтесь на свету" : "В темноте время пойдёт назад";
 
         bar.gameObject.SetActive(!won && ((!inLight && !rewinding) || resetting));
         if (bar.gameObject.activeSelf)
@@ -163,7 +165,7 @@ public sealed class NightClock : MonoBehaviour
         }
 
         stopped.gameObject.SetActive(won || lampsStopped);
-        stopped.text = won ? "R — начать заново" : "Время стоит, чините лампы";
+        stopped.text = won ? "Нажмите R, чтобы начать заново" : "Время стоит, чините лампы";
         stopped.rectTransform.anchoredPosition = new Vector2(0f,
             won || !inLight || resetting ? (bar.gameObject.activeSelf ? -76f : -62f) : -40f);
     }
@@ -186,24 +188,34 @@ public sealed class NightClock : MonoBehaviour
             Destroy(panel.gameObject);
     }
 
+    private TextMeshProUGUI CreateHint(string objectName, TMP_FontAsset font)
+    {
+        var label = CreateLabel(objectName, new Vector2(0f, -40f), 22, HintFontSize, font);
+        var fitter = label.gameObject.AddComponent<UnityEngine.UI.ContentSizeFitter>();
+        fitter.horizontalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
+        return label;
+    }
+
     private TextMeshProUGUI CreateLabel(string objectName, Vector2 position, int height, float fontSize, TMP_FontAsset font)
     {
-        RectTransform rect = CreateRect(objectName, panel, position, new Vector2(HudWidth, height));
+        RectTransform rect = CreateRect(objectName, panel, position, new Vector2(HudWidth, height), TopCenter);
         var label = rect.gameObject.AddComponent<TextMeshProUGUI>();
         if (font != null)
             label.font = font;
         label.fontSize = fontSize;
-        label.alignment = TextAlignmentOptions.MidlineRight;
+        label.alignment = TextAlignmentOptions.Midline;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.enableAutoSizing = false;
         label.raycastTarget = false;
         return label;
     }
 
-    private static RectTransform CreateRect(string objectName, Transform parent, Vector2 position, Vector2 size)
+    private static RectTransform CreateRect(string objectName, Transform parent, Vector2 position, Vector2 size, Vector2 anchor)
     {
         var element = new GameObject(objectName, typeof(RectTransform)) { layer = parent.gameObject.layer };
         var rect = (RectTransform)element.transform;
         rect.SetParent(parent, false);
-        rect.anchorMin = rect.anchorMax = rect.pivot = TopRight;
+        rect.anchorMin = rect.anchorMax = rect.pivot = anchor;
         rect.anchoredPosition = position;
         rect.sizeDelta = size;
         return rect;

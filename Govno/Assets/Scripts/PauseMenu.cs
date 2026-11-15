@@ -9,12 +9,16 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(FirstPersonController), typeof(GameAudioSettings))]
 public sealed class PauseMenu : MonoBehaviour
 {
-    private static readonly Color PanelColor = new(0.18f, 0.18f, 0.18f);
+    private static readonly Color PanelColor = new(0.055f, 0.055f, 0.06f, 0.97f);
+    private static readonly Color FrameColor = new(1f, 1f, 1f, 0.20f);
+    private static readonly Color PaperColor = new(0.93f, 0.91f, 0.87f);
+    private static readonly Color FocusColor = new(1f, 0.81f, 0.52f);
 
     private FirstPersonController player;
     private GameAudioSettings audioSettings;
     private EventSystem ownedEventSystem;
     private GameObject overlay;
+    private TMPro.TMP_FontAsset menuFont;
     private UnityEngine.UI.Slider volumeSlider;
     private UnityEngine.UI.Slider sensitivitySlider;
     private TMPro.TextMeshProUGUI volumeValue;
@@ -74,10 +78,13 @@ public sealed class PauseMenu : MonoBehaviour
         if (player == null || !player.IsPaused)
             return;
 
-        if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != null &&
-            EventSystem.current.currentSelectedGameObject.transform.IsChildOf(overlay.transform))
-            EventSystem.current.SetSelectedGameObject(null);
-        overlay.SetActive(false);
+        if (overlay != null)
+        {
+            if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != null &&
+                EventSystem.current.currentSelectedGameObject.transform.IsChildOf(overlay.transform))
+                EventSystem.current.SetSelectedGameObject(null);
+            overlay.SetActive(false);
+        }
         if (ownedEventSystem != null)
             ownedEventSystem.gameObject.SetActive(false);
         Time.timeScale = previousTimeScale;
@@ -101,6 +108,7 @@ public sealed class PauseMenu : MonoBehaviour
 
     private void BuildMenu()
     {
+        menuFont = Resources.Load<TMPro.TMP_FontAsset>("NightClock/Menu and Hints");
         overlay = new GameObject("Pause Menu", typeof(RectTransform), typeof(Canvas),
             typeof(UnityEngine.UI.CanvasScaler), typeof(UnityEngine.UI.GraphicRaycaster));
         if (overlay.scene != gameObject.scene)
@@ -112,20 +120,25 @@ public sealed class PauseMenu : MonoBehaviour
         var scaler = overlay.GetComponent<UnityEngine.UI.CanvasScaler>();
         scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1280, 720);
-        scaler.matchWidthOrHeight = 0f;
+        scaler.screenMatchMode = UnityEngine.UI.CanvasScaler.ScreenMatchMode.Expand;
 
-        var scrim = CreateImage("Scrim", overlay.transform, new Color(0f, 0f, 0f, 0.6f));
+        var scrim = CreateImage("Scrim", overlay.transform, new Color(0f, 0f, 0f, 0.7f));
         scrim.rectTransform.anchorMin = Vector2.zero;
         scrim.rectTransform.anchorMax = Vector2.one;
         scrim.rectTransform.sizeDelta = Vector2.zero;
 
         var panel = CreateImage("Panel", scrim.transform, PanelColor);
-        Place(panel.rectTransform, Vector2.zero, new Vector2(460, 254));
-        var title = CreateText("Пауза", panel.transform, 32, TMPro.TextAlignmentOptions.Center);
-        Place(title.rectTransform, new Vector2(0, 88), new Vector2(400, 44));
+        Place(panel.rectTransform, Vector2.zero, new Vector2(444, 280));
+        var outline = panel.gameObject.AddComponent<UnityEngine.UI.Outline>();
+        outline.effectColor = FrameColor;
+        outline.effectDistance = new Vector2(1f, -1f);
+        var title = CreateText("Пауза", panel.transform, 29, TMPro.TextAlignmentOptions.Center);
+        title.characterSpacing = 4f;
+        Place(title.rectTransform, new Vector2(0, 99), new Vector2(370, 42));
+        AddDivider(panel.transform, 69f);
 
-        volumeSlider = CreateSlider(panel.transform, "Громкость", 34, 0, 100, out volumeValue);
-        sensitivitySlider = CreateSlider(panel.transform, "Чувствительность мыши", -32, 0, 50, out sensitivityValue);
+        volumeSlider = CreateSlider(panel.transform, "Громкость", 33, 0, 100, out volumeValue);
+        sensitivitySlider = CreateSlider(panel.transform, "Чувствительность мыши", -33, 0, 50, out sensitivityValue);
         volumeSlider.onValueChanged.AddListener(value =>
         {
             audioSettings.MasterVolume = value / 100f;
@@ -137,15 +150,28 @@ public sealed class PauseMenu : MonoBehaviour
             RefreshValues();
         });
 
-        var menuButton = CreateTextButton(panel.transform, "В меню", new Vector2(-76, -91));
-        menuButton.interactable = false;
-        var closeButton = CreateTextButton(panel.transform, "Закрыть", new Vector2(76, -91));
+        AddDivider(panel.transform, -75f);
+        var menuButton = CreateTextButton(panel.transform, "В меню", new Vector2(-92, -105));
+        menuButton.interactable = Application.CanStreamedLevelBeLoaded(MainMenu.ScenePath);
+        menuButton.onClick.AddListener(() =>
+        {
+            Close();
+            SceneManager.LoadSceneAsync(MainMenu.ScenePath);
+        });
+        var closeButton = CreateTextButton(panel.transform, "Закрыть", new Vector2(92, -105));
         closeButton.onClick.AddListener(Close);
     }
 
-    private static UnityEngine.UI.Button CreateTextButton(Transform parent, string caption, Vector2 position)
+    private static void AddDivider(Transform parent, float y)
     {
-        var label = CreateText(caption, parent, 19, TMPro.TextAlignmentOptions.Center);
+        var divider = CreateImage("Divider", parent, FrameColor);
+        divider.raycastTarget = false;
+        Place(divider.rectTransform, new Vector2(0f, y), new Vector2(364f, 1f));
+    }
+
+    private UnityEngine.UI.Button CreateTextButton(Transform parent, string caption, Vector2 position)
+    {
+        var label = CreateText(caption, parent, 18, TMPro.TextAlignmentOptions.Center);
         label.gameObject.name = caption;
         label.raycastTarget = true;
         Place(label.rectTransform, position, new Vector2(128, 34));
@@ -153,33 +179,45 @@ public sealed class PauseMenu : MonoBehaviour
         var button = label.gameObject.AddComponent<UnityEngine.UI.Button>();
         button.targetGraphic = label;
         var colors = button.colors;
-        colors.normalColor = new Color(0.88f, 0.88f, 0.88f);
-        colors.highlightedColor = Color.white;
-        colors.selectedColor = Color.white;
-        colors.pressedColor = new Color(0.72f, 0.72f, 0.72f);
+        colors.normalColor = Color.white;
+        colors.highlightedColor = FocusColor;
+        colors.selectedColor = FocusColor;
+        colors.pressedColor = new Color(0.85f, 0.64f, 0.40f);
         colors.disabledColor = new Color(0.56f, 0.56f, 0.56f);
         button.colors = colors;
         return button;
     }
 
-    private static UnityEngine.UI.Slider CreateSlider(Transform panel, string caption, float y,
+    private UnityEngine.UI.Slider CreateSlider(Transform panel, string caption, float y,
         int min, int max, out TMPro.TextMeshProUGUI value)
     {
-        var label = CreateText(caption, panel, 19, TMPro.TextAlignmentOptions.MidlineLeft);
-        Place(label.rectTransform, new Vector2(0, y + 16), new Vector2(388, 24));
+        var label = CreateText(caption, panel, 17, TMPro.TextAlignmentOptions.MidlineLeft);
+        Place(label.rectTransform, new Vector2(-35, y + 11), new Vector2(294, 24));
         var sliderObject = UnityEngine.UI.DefaultControls.CreateSlider(default);
+        sliderObject.name = caption + " Slider";
         sliderObject.transform.SetParent(panel, false);
-        Place((RectTransform)sliderObject.transform, new Vector2(-36, y - 10), new Vector2(316, 20));
-        sliderObject.transform.Find("Background").GetComponent<UnityEngine.UI.Image>().color =
-            new Color(0.32f, 0.32f, 0.32f);
+        Place((RectTransform)sliderObject.transform, new Vector2(0, y - 12), new Vector2(364, 20));
+        sliderObject.AddComponent<UnityEngine.UI.Image>().color = Color.clear;
+        var track = sliderObject.transform.Find("Background").GetComponent<UnityEngine.UI.Image>();
+        track.color = FrameColor;
+        CenterTrack(track.rectTransform, 4f, 10f);
         var slider = sliderObject.GetComponent<UnityEngine.UI.Slider>();
-        slider.fillRect.GetComponent<UnityEngine.UI.Image>().color = new Color(0.66f, 0.66f, 0.66f);
+        CenterTrack((RectTransform)slider.fillRect.parent, 4f, 10f);
+        slider.fillRect.sizeDelta = Vector2.zero;
+        slider.fillRect.GetComponent<UnityEngine.UI.Image>().color = PaperColor;
+        slider.handleRect.sizeDelta = new Vector2(5f, -7f);
+        slider.targetGraphic.color = PaperColor;
+        var colors = slider.colors;
+        colors.normalColor = Color.white;
+        colors.highlightedColor = FocusColor;
+        colors.selectedColor = FocusColor;
+        slider.colors = colors;
         slider.minValue = min;
         slider.maxValue = max;
         slider.wholeNumbers = true;
 
-        value = CreateText("", panel, 19, TMPro.TextAlignmentOptions.MidlineRight);
-        Place(value.rectTransform, new Vector2(165, y - 10), new Vector2(58, 24));
+        value = CreateText("", panel, 17, TMPro.TextAlignmentOptions.MidlineRight);
+        Place(value.rectTransform, new Vector2(151, y + 11), new Vector2(62, 24));
         return slider;
     }
 
@@ -192,17 +230,28 @@ public sealed class PauseMenu : MonoBehaviour
         return image;
     }
 
-    private static TMPro.TextMeshProUGUI CreateText(string content, Transform parent, float size,
+    private TMPro.TextMeshProUGUI CreateText(string content, Transform parent, float size,
         TMPro.TextAlignmentOptions alignment)
     {
         var element = new GameObject("Label", typeof(RectTransform), typeof(TMPro.TextMeshProUGUI));
         element.transform.SetParent(parent, false);
         var label = element.GetComponent<TMPro.TextMeshProUGUI>();
         label.text = content;
+        if (menuFont != null)
+            label.font = menuFont;
         label.fontSize = size;
+        label.color = PaperColor;
         label.alignment = alignment;
         label.raycastTarget = false;
         return label;
+    }
+
+    private static void CenterTrack(RectTransform rect, float height, float inset)
+    {
+        rect.anchorMin = new Vector2(0f, 0.5f);
+        rect.anchorMax = new Vector2(1f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = new Vector2(-2f * inset, height);
     }
 
     private static void Place(RectTransform rect, Vector2 position, Vector2 size)
