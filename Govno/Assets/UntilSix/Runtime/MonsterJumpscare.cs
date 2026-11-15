@@ -12,7 +12,7 @@ namespace UntilSix.Monster
         private const float CameraTurnSpeed = 720f;
         private const float FadeDuration = 0.2f;
         private const float BlackoutDuration = 0.5f;
-        private const float RecoveryDuration = 5f;
+        private const float RecoveryDuration = 7.5f;
         private const float MinimumTeleportDistance = 4f;
         private const float ZoomDuration = 0.22f;
         private const float MinimumCloseupFieldOfView = 25f;

@@ -49,6 +49,9 @@ public sealed class BulbBox : MonoBehaviour
         body = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
         boxRenderers = GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer renderer in boxRenderers)
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+
         dropInterpolation = body.interpolation;
         remaining = bulbs.Length;
         if (lid != null)

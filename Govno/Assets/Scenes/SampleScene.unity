@@ -166,16 +166,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 33
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -188,7 +188,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3879786}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -230,7 +230,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -349,7 +349,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 38156713}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -540,9 +540,49 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7677483626604256572, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -4146535286332727234, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: -2307585777704240630, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 61754085453681114, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 520271729962968403, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
       propertyPath: m_Name
       value: Do_Shesti_Cottage
+      objectReference: {fileID: 0}
+    - target: {fileID: 2422039097442194407, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218020689352168038, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 3327997590840587245, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5582676194542655322, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309088388774342846, guid: 71f07345ebdda994cbff3e24208ba9bf, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 65
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1371,16 +1411,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 17
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -1393,7 +1433,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189008330}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -1435,7 +1475,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -2152,13 +2192,25 @@ PrefabInstance:
       value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
     - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
+    - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -2918,7 +2970,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 365353077}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -3092,7 +3144,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 389413886}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -3548,13 +3600,25 @@ PrefabInstance:
       value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
     - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
+    - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -4669,13 +4733,25 @@ PrefabInstance:
       value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
     - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
+    - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -5641,7 +5717,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 658513190}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -5943,16 +6019,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 9
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -5965,7 +6041,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 785175651}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -6007,7 +6083,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -6136,16 +6212,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 37
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -6158,7 +6234,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798550375}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -6200,7 +6276,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -6566,16 +6642,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 41
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -6588,7 +6664,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873995566}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -6630,7 +6706,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -6818,13 +6894,25 @@ PrefabInstance:
       value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
     - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
+    - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -7832,16 +7920,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 45
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -7854,7 +7942,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060077806}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -7896,7 +7984,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -8087,16 +8175,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 49
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -8109,7 +8197,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109774791}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -8151,7 +8239,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -8214,16 +8302,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 21
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -8236,7 +8324,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124252168}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -8278,7 +8366,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -8656,7 +8744,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1180123359}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -8861,7 +8949,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1191182323}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -9030,13 +9118,25 @@ PrefabInstance:
       value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
     - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
+    - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -9697,7 +9797,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258320439}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -10150,7 +10250,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318916457}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -10192,7 +10292,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -10222,16 +10322,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 25
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -10446,16 +10546,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 53
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -10468,7 +10568,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1376792480}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -10510,7 +10610,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -11029,7 +11129,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1415319763}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -11745,7 +11845,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 6b45e509ece395141ad556436c8981f0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11917,8 +12017,8 @@ MonoBehaviour:
   bulbTurningVolume: 0.15
   bulbRemovedVolume: 0.9
   lampBreakSound: {fileID: 8300000, guid: 904be56014fef2a44ba5425afc8ccab8, type: 3}
-  lampBreakVolume: 0.6
-  monsterFootstepsVolume: 0.9
+  lampBreakVolume: 0.3
+  monsterFootstepsVolume: 0.4
   monsterDisappearanceVolume: 1
   playerBreathVolume: 1
   chaseScreamVolume: 1
@@ -12380,13 +12480,25 @@ PrefabInstance:
       value: -90
       objectReference: {fileID: 0}
     - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4936160660025766424, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
     - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4463895010634113322, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b30a183204a36ef4dbc1bea0bb8018e5, type: 2}
+    - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -2720221069562527839, guid: 06d4de403b6b0f14b875598305b212e7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -12618,7 +12730,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562351659}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -12916,10 +13028,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -211499737272066483, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b45e509ece395141ad556436c8981f0, type: 2}
     - target: {fileID: 919132149155446097, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
       propertyPath: m_Name
       value: Fonarzhk-animated
       objectReference: {fileID: 0}
+    - target: {fileID: 1424559390562196243, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b45e509ece395141ad556436c8981f0, type: 2}
+    - target: {fileID: 2770977024713219323, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b45e509ece395141ad556436c8981f0, type: 2}
+    - target: {fileID: 3261972472372342013, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b45e509ece395141ad556436c8981f0, type: 2}
     - target: {fileID: 5866666021909216657, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
       propertyPath: m_Controller
       value: 
@@ -12928,6 +13056,10 @@ PrefabInstance:
       propertyPath: m_CullingMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7884618069271140746, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b45e509ece395141ad556436c8981f0, type: 2}
     - target: {fileID: 8900065099967771476, guid: 6e740eea24c74904fa9b8d72aef1f8f0, type: 3}
       propertyPath: m_RenderingLayerMask
       value: 2
@@ -12961,6 +13093,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1614577843}
+  - component: {fileID: 1614577844}
   m_Layer: 0
   m_Name: Cottage Lamps
   m_TagString: Untagged
@@ -12996,6 +13129,19 @@ Transform:
   - {fileID: 857060115}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1614577844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614577842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db59c0b05b84c7446b0691eac9ad002a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CottageBakedShadows
+  depth: {fileID: 18700000, guid: 1e528dd0710413a4c990c96754d55285, type: 2}
 --- !u!1 &1620639564
 GameObject:
   m_ObjectHideFlags: 0
@@ -13680,16 +13826,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 29
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -13702,7 +13848,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733935466}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -13744,7 +13890,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -14052,16 +14198,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 13
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -14074,7 +14220,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761458039}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -14116,7 +14262,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
@@ -14628,7 +14774,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1821309869}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -15253,7 +15399,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1916345539}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -15640,7 +15786,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1968800665}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -15953,16 +16099,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 0
   m_AdditionalLightsShadowResolutionTier: 1
-  m_CustomShadowLayers: 0
+  m_CustomShadowLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
   m_RenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 5
   m_ShadowRenderingLayersMask:
     serializedVersion: 0
-    m_Bits: 1
+    m_Bits: 64
   m_Version: 4
   m_LightLayerMask: 1
   m_ShadowLayerMask: 1
@@ -15975,7 +16121,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066857201}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -16017,7 +16163,7 @@ Light:
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 64
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
