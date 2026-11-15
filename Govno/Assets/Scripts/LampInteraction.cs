@@ -21,6 +21,8 @@ public sealed class LampInteraction : MonoBehaviour
     private float heldBoxDistance = 0.92f;
     [SerializeField, Tooltip("Vertical offset from the camera, in meters. Negative values move the box down.")]
     private float heldBoxHeight = -0.29f;
+    [SerializeField, Tooltip("Render shadows for the box in the player's hands. Does not affect world shadows.")]
+    private bool heldItemShadows;
     [SerializeField] private Shader lampOutlineShader;
     [SerializeField, ColorUsage(false)] private Color lampOutlineColor = new(1f, 0.86f, 0.1f);
     [SerializeField, Min(0f), Tooltip("Lamp outline width in pixels.")] private float lampOutlineWidth = 2f;
@@ -122,6 +124,7 @@ public sealed class LampInteraction : MonoBehaviour
 
         var overlayData = heldItemCamera.GetUniversalAdditionalCameraData();
         overlayData.renderType = CameraRenderType.Overlay;
+        overlayData.renderShadows = heldItemShadows;
         // The overlay camera clears depth so only the item's own geometry can occlude it.
         overlayData.renderPostProcessing = false;
         overlayData.requiresColorOption = CameraOverrideOption.Off;

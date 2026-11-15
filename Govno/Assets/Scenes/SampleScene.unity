@@ -7395,6 +7395,7 @@ GameObject:
   - component: {fileID: 1740000005}
   - component: {fileID: 1501000016}
   - component: {fileID: 1501000017}
+  - component: {fileID: 1740000006}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -9196,6 +9197,165 @@ MonoBehaviour:
   - {fileID: 262811764}
   - {fileID: 1788706859}
   - {fileID: 1912864941}
+--- !u!114 &1740000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4525910754624a741a883cd0558d30ca, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::CottageLightCulling
+  viewCamera: {fileID: 330585545}
+  zones:
+  - {fileID: 1620639566}
+  - {fileID: 1499713934}
+  - {fileID: 1047783724}
+  - {fileID: 1717758659}
+  - {fileID: 1888863246}
+  - {fileID: 313547360}
+  - {fileID: 2127583657}
+  - {fileID: 566927559}
+  - {fileID: 1859204304}
+  - {fileID: 977301429}
+  - {fileID: 539479985}
+  - {fileID: 1207530912}
+  - {fileID: 1788706859}
+  - {fileID: 1912864941}
+  - {fileID: 1225855068}
+  - {fileID: 544690499}
+  - {fileID: 2026504801}
+  - {fileID: 262811764}
+  openings:
+  - firstRoom: {fileID: 44233512}
+    secondRoom: {fileID: 1142931739}
+    doorway: {fileID: 1028452363}
+    door: {fileID: 935347722}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 655806443}
+    secondRoom: {fileID: 1312748698}
+    doorway: {fileID: 884893093}
+    door: {fileID: 1813696434}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 655806443}
+    secondRoom: {fileID: 622451555}
+    doorway: {fileID: 1849953159}
+    door: {fileID: 351587925}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 44233512}
+    secondRoom: {fileID: 1250235621}
+    doorway: {fileID: 1932587977}
+    door: {fileID: 197160988}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 622451555}
+    secondRoom: {fileID: 847628224}
+    doorway: {fileID: 1736706477}
+    door: {fileID: 199538900}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 1142931739}
+    secondRoom: {fileID: 1312748698}
+    doorway: {fileID: 402238256}
+    door: {fileID: 1390536400}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 857060117}
+    secondRoom: {fileID: 143490481}
+    doorway: {fileID: 1743828870}
+    door: {fileID: 1006542385}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 857060117}
+    secondRoom: {fileID: 1061749335}
+    doorway: {fileID: 698777883}
+    door: {fileID: 449361999}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 1793049607}
+    secondRoom: {fileID: 143490481}
+    doorway: {fileID: 547642797}
+    door: {fileID: 613152682}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 1927881952}
+    secondRoom: {fileID: 1061749335}
+    doorway: {fileID: 1860679557}
+    door: {fileID: 1363866254}
+    passage:
+      m_Center: {x: 0, y: 0, z: 0}
+      m_Extent: {x: 0, y: 0, z: 0}
+  - firstRoom: {fileID: 44233512}
+    secondRoom: {fileID: 655806443}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: 0.045000076, y: 1.53, z: 12.45}
+      m_Extent: {x: 2.9850001, y: 1.51, z: 0.13000011}
+  - firstRoom: {fileID: 1576051365}
+    secondRoom: {fileID: 857060117}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: -0.895, y: 4.7650003, z: 12.135}
+      m_Extent: {x: 2.045, y: 1.5150001, z: 2.2649999}
+  - firstRoom: {fileID: 1576051365}
+    secondRoom: {fileID: 1793049607}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: 3.03, y: 4.7650003, z: 6.6949997}
+      m_Extent: {x: 0.089999914, y: 1.5150001, z: 1.345}
+  - firstRoom: {fileID: 1576051365}
+    secondRoom: {fileID: 1927881952}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: -2.925, y: 4.7650003, z: 6.6949997}
+      m_Extent: {x: 0.10500002, y: 1.5150001, z: 1.345}
+  - firstRoom: {fileID: 44233512}
+    secondRoom: {fileID: 857060117}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: 1.96, y: 2.61, z: 12.46}
+      m_Extent: {x: 0.9200001, y: 2.59, z: 2.6599998}
+  - firstRoom: {fileID: 44233512}
+    secondRoom: {fileID: 1576051365}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: 1.96, y: 2.61, z: 12.46}
+      m_Extent: {x: 0.9200001, y: 2.59, z: 2.6599998}
+  - firstRoom: {fileID: 655806443}
+    secondRoom: {fileID: 857060117}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: 1.96, y: 2.61, z: 12.46}
+      m_Extent: {x: 0.9200001, y: 2.59, z: 2.6599998}
+  - firstRoom: {fileID: 655806443}
+    secondRoom: {fileID: 1576051365}
+    doorway: {fileID: 0}
+    door: {fileID: 0}
+    passage:
+      m_Center: {x: 1.96, y: 2.61, z: 12.46}
+      m_Extent: {x: 0.9200001, y: 2.59, z: 2.6599998}
 --- !u!1 &1743828867
 GameObject:
   m_ObjectHideFlags: 0

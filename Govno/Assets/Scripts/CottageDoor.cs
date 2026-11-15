@@ -15,6 +15,8 @@ public sealed class CottageDoor : MonoBehaviour
     private float angle;
     private bool wantsOpen;
 
+    internal bool IsLightPassageOpen => wantsOpen || Mathf.Abs(angle) > 0.01f;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody>();

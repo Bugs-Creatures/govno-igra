@@ -19,11 +19,22 @@ public sealed class CeilingLamp : MonoBehaviour
     private AudioSource breakAudio;
     private bool audioStateDirty;
     private bool brokenBulbRemoved;
+    private bool renderingVisible = true;
 
     public bool IsBroken => isBroken;
     public bool IsWorking => isActiveAndEnabled && !isBroken;
     public bool HasBrokenBulb => isBroken && !brokenBulbRemoved && brokenVisual != null;
     public float SecondsForCurrentStage => Mathf.Max(0.01f, HasBrokenBulb ? secondsToRemove : secondsToRepair);
+    internal Light RenderLight => lampLight;
+
+    internal void SetRenderingVisible(bool visible)
+    {
+        if (renderingVisible == visible)
+            return;
+
+        renderingVisible = visible;
+        UpdateLight();
+    }
 
     private void Awake()
     {
@@ -186,7 +197,7 @@ public sealed class CeilingLamp : MonoBehaviour
     private void UpdateLight()
     {
         if (lampLight != null)
-            lampLight.enabled = useLampForRendering && IsWorking;
+            lampLight.enabled = useLampForRendering && renderingVisible && IsWorking;
     }
 
     private void ApplyAudioState()
