@@ -11,12 +11,12 @@ public sealed class CottageBakedShadows : MonoBehaviour
     private void OnEnable()
     {
         Shader.SetGlobalTexture(ShadowDepth, depth);
-        Shader.SetGlobalInt(LampCount, depth != null ? depth.depth / 6 : 0);
+        Shader.SetGlobalFloat(LampCount, depth != null ? depth.depth / 6 : 0);
     }
 
     private void OnDisable()
     {
-        Shader.SetGlobalInt(LampCount, 0);
+        Shader.SetGlobalFloat(LampCount, 0);
         Shader.SetGlobalTexture(ShadowDepth, null);
     }
 }
