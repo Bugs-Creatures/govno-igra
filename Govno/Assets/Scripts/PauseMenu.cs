@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 [DefaultExecutionOrder(-50)]
 [RequireComponent(typeof(FirstPersonController), typeof(GameAudioSettings))]
-public sealed class PauseMenu : MonoBehaviour
+public sealed partial class PauseMenu : MonoBehaviour
 {
     private static readonly Color PanelColor = new(0.055f, 0.055f, 0.06f, 0.97f);
     private static readonly Color FrameColor = new(1f, 1f, 1f, 0.20f);
@@ -35,6 +35,8 @@ public sealed class PauseMenu : MonoBehaviour
 
     private void Update()
     {
+        if (tutorialOverlay != null && tutorialOverlay.activeSelf)
+            return;
         if (player.IsCinematicLocked || Keyboard.current?.escapeKey.wasPressedThisFrame != true)
             return;
 
@@ -46,17 +48,24 @@ public sealed class PauseMenu : MonoBehaviour
 
     private void Open()
     {
+        PauseGameplay();
+        volumeSlider.SetValueWithoutNotify(Mathf.RoundToInt(audioSettings.MasterVolume * 100f));
+        int sensitivity = Mathf.RoundToInt(player.MouseSensitivity * 100f);
+        sensitivitySlider.maxValue = Mathf.Max(50, sensitivity);
+        sensitivitySlider.SetValueWithoutNotify(sensitivity);
+        RefreshValues();
+        overlay.SetActive(true);
+        EventSystem.current?.SetSelectedGameObject(volumeSlider.gameObject);
+    }
+
+    private void PauseGameplay()
+    {
         previousTimeScale = Time.timeScale;
         previousAudioPause = AudioListener.pause;
         Time.timeScale = 0f;
         AudioListener.pause = true;
         player.SetPaused(true);
 
-        volumeSlider.SetValueWithoutNotify(Mathf.RoundToInt(audioSettings.MasterVolume * 100f));
-        int sensitivity = Mathf.RoundToInt(player.MouseSensitivity * 100f);
-        sensitivitySlider.maxValue = Mathf.Max(50, sensitivity);
-        sensitivitySlider.SetValueWithoutNotify(sensitivity);
-        RefreshValues();
         if (EventSystem.current == null)
         {
             if (ownedEventSystem == null)
@@ -68,9 +77,6 @@ public sealed class PauseMenu : MonoBehaviour
             }
             ownedEventSystem.gameObject.SetActive(true);
         }
-
-        overlay.SetActive(true);
-        EventSystem.current?.SetSelectedGameObject(volumeSlider.gameObject);
     }
 
     private void Close()
@@ -78,18 +84,24 @@ public sealed class PauseMenu : MonoBehaviour
         if (player == null || !player.IsPaused)
             return;
 
-        if (overlay != null)
-        {
-            if (EventSystem.current != null && EventSystem.current.currentSelectedGameObject != null &&
-                EventSystem.current.currentSelectedGameObject.transform.IsChildOf(overlay.transform))
-                EventSystem.current.SetSelectedGameObject(null);
-            overlay.SetActive(false);
-        }
+        HideOverlay(overlay);
+        HideOverlay(tutorialOverlay);
         if (ownedEventSystem != null)
             ownedEventSystem.gameObject.SetActive(false);
         Time.timeScale = previousTimeScale;
         AudioListener.pause = previousAudioPause;
         player.SetPaused(false);
+    }
+
+    private static void HideOverlay(GameObject target)
+    {
+        if (target == null || !target.activeSelf)
+            return;
+        var eventSystem = EventSystem.current;
+        var selected = eventSystem != null ? eventSystem.currentSelectedGameObject : null;
+        if (selected != null && selected.transform.IsChildOf(target.transform))
+            eventSystem.SetSelectedGameObject(null);
+        target.SetActive(false);
     }
 
     private void OnDisable() => Close();
@@ -98,6 +110,8 @@ public sealed class PauseMenu : MonoBehaviour
     {
         if (overlay != null)
             Destroy(overlay);
+        if (tutorialOverlay != null)
+            Destroy(tutorialOverlay);
     }
 
     private void RefreshValues()
@@ -109,29 +123,7 @@ public sealed class PauseMenu : MonoBehaviour
     private void BuildMenu()
     {
         menuFont = Resources.Load<TMPro.TMP_FontAsset>("NightClock/Menu and Hints");
-        overlay = new GameObject("Pause Menu", typeof(RectTransform), typeof(Canvas),
-            typeof(UnityEngine.UI.CanvasScaler), typeof(UnityEngine.UI.GraphicRaycaster));
-        if (overlay.scene != gameObject.scene)
-            SceneManager.MoveGameObjectToScene(overlay, gameObject.scene);
-        overlay.SetActive(false);
-        var canvas = overlay.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 100;
-        var scaler = overlay.GetComponent<UnityEngine.UI.CanvasScaler>();
-        scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1280, 720);
-        scaler.screenMatchMode = UnityEngine.UI.CanvasScaler.ScreenMatchMode.Expand;
-
-        var scrim = CreateImage("Scrim", overlay.transform, new Color(0f, 0f, 0f, 0.7f));
-        scrim.rectTransform.anchorMin = Vector2.zero;
-        scrim.rectTransform.anchorMax = Vector2.one;
-        scrim.rectTransform.sizeDelta = Vector2.zero;
-
-        var panel = CreateImage("Panel", scrim.transform, PanelColor);
-        Place(panel.rectTransform, Vector2.zero, new Vector2(444, 280));
-        var outline = panel.gameObject.AddComponent<UnityEngine.UI.Outline>();
-        outline.effectColor = FrameColor;
-        outline.effectDistance = new Vector2(1f, -1f);
+        overlay = CreateOverlay("Pause Menu", new Vector2(444, 280), out var panel);
         var title = CreateText("Пауза", panel.transform, 29, TMPro.TextAlignmentOptions.Center);
         title.characterSpacing = 4f;
         Place(title.rectTransform, new Vector2(0, 99), new Vector2(370, 42));
@@ -162,11 +154,39 @@ public sealed class PauseMenu : MonoBehaviour
         closeButton.onClick.AddListener(Close);
     }
 
-    private static void AddDivider(Transform parent, float y)
+    private GameObject CreateOverlay(string objectName, Vector2 panelSize, out RectTransform panel)
+    {
+        var root = new GameObject(objectName, typeof(RectTransform), typeof(Canvas),
+            typeof(UnityEngine.UI.CanvasScaler), typeof(UnityEngine.UI.GraphicRaycaster));
+        if (root.scene != gameObject.scene)
+            SceneManager.MoveGameObjectToScene(root, gameObject.scene);
+        root.SetActive(false);
+        var canvas = root.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 100;
+        var scaler = root.GetComponent<UnityEngine.UI.CanvasScaler>();
+        scaler.uiScaleMode = UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1280, 720);
+        scaler.screenMatchMode = UnityEngine.UI.CanvasScaler.ScreenMatchMode.Expand;
+
+        var scrim = CreateImage("Scrim", root.transform, new Color(0f, 0f, 0f, 0.7f));
+        scrim.rectTransform.anchorMin = Vector2.zero;
+        scrim.rectTransform.anchorMax = Vector2.one;
+        scrim.rectTransform.sizeDelta = Vector2.zero;
+
+        panel = CreateImage("Panel", scrim.transform, PanelColor).rectTransform;
+        Place(panel, Vector2.zero, panelSize);
+        var outline = panel.gameObject.AddComponent<UnityEngine.UI.Outline>();
+        outline.effectColor = FrameColor;
+        outline.effectDistance = new Vector2(1f, -1f);
+        return root;
+    }
+
+    private static void AddDivider(Transform parent, float y, float width = 364f)
     {
         var divider = CreateImage("Divider", parent, FrameColor);
         divider.raycastTarget = false;
-        Place(divider.rectTransform, new Vector2(0f, y), new Vector2(364f, 1f));
+        Place(divider.rectTransform, new Vector2(0f, y), new Vector2(width, 1f));
     }
 
     private UnityEngine.UI.Button CreateTextButton(Transform parent, string caption, Vector2 position)

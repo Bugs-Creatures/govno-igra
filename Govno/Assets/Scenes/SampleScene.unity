@@ -188,7 +188,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3879786}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -1393,7 +1393,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 189008330}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -5965,7 +5965,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 785175651}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -6158,7 +6158,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798550375}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -6588,7 +6588,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873995566}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -7854,7 +7854,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060077806}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -8109,7 +8109,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1109774791}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -8236,7 +8236,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124252168}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -10150,7 +10150,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318916457}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -10468,7 +10468,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1376792480}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -11947,6 +11947,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d61e9d144cbe48b7becf74132fdb19f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tutorialCards:
+  - image: {fileID: 2800000, guid: a48f070ad8d2fe44c91b008e63565fbf, type: 3}
+    title: "\u0414\u043E\u0436\u0438\u0442\u044C \u0434\u043E \u0448\u0435\u0441\u0442\u0438"
+    body: "\u0412\u044B \u0431\u043E\u0438\u0442\u0435\u0441\u044C \u0442\u0435\u043C\u043D\u043E\u0442\u044B. \u0427\u0442\u043E\u0431\u044B \u043F\u0435\u0440\u0435\u0436\u0438\u0442\u044C \u043D\u043E\u0447\u044C, \u043E\u0441\u0442\u0430\u0432\u0430\u0439\u0442\u0435\u0441\u044C \u043D\u0430 \u0441\u0432\u0435\u0442\u0443, \u043F\u043E\u043A\u0430 \u0447\u0430\u0441\u044B \u043D\u0435 \u043F\u043E\u043A\u0430\u0436\u0443\u0442 06:00."
+  - image: {fileID: 2800000, guid: 362af5c6989e8634eaeb379f1d8996fb, type: 3}
+    title: "\u0412 \u0442\u0435\u043C\u043D\u043E\u0442\u0435 \u0432\u0440\u0435\u043C\u044F \u0438\u0434\u0451\u0442 \u043D\u0430\u0437\u0430\u0434"
+    body: "\u0412\u0435\u0440\u043D\u0438\u0442\u0435\u0441\u044C \u043D\u0430 \u0441\u0432\u0435\u0442, \u0447\u0442\u043E\u0431\u044B \u0447\u0430\u0441\u044B \u0441\u043D\u043E\u0432\u0430 \u043F\u043E\u0448\u043B\u0438 \u0432\u043F\u0435\u0440\u0451\u0434."
+  - image: {fileID: 2800000, guid: b134c034a2e4234438eb86b12d401e75, type: 3}
+    title: "\u041A\u043E\u0433\u0434\u0430 \u0433\u0430\u0441\u043D\u0435\u0442 \u0441\u0432\u0435\u0442"
+    body: "\u0424\u043E\u043D\u0430\u0440\u0449\u0438\u043A \u0440\u0430\u0437\u0431\u0438\u0432\u0430\u0435\u0442 \u043B\u0430\u043C\u043F\u044B \u043F\u043E \u0432\u0441\u0435\u043C\u0443 \u0434\u043E\u043C\u0443. \u0415\u0441\u043B\u0438 \u0438\u0445 \u043F\u043E\u0433\u0430\u0441\u043D\u0435\u0442 \u0441\u043B\u0438\u0448\u043A\u043E\u043C \u043C\u043D\u043E\u0433\u043E, \u0447\u0430\u0441\u044B \u043E\u0441\u0442\u0430\u043D\u043E\u0432\u044F\u0442\u0441\u044F."
+  - image: {fileID: 2800000, guid: 853586059416d5a408415fc3dcfae51b, type: 3}
+    title: "\u041D\u0430 \u0441\u0432\u0435\u0442\u0443 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E"
+    body: "\u0412 \u0442\u0435\u043C\u043D\u043E\u0442\u0435 \u0424\u043E\u043D\u0430\u0440\u0449\u0438\u043A \u043D\u0430\u043F\u0430\u0434\u0430\u0435\u0442. \u041D\u0430 \u0441\u0432\u0435\u0442\u0443 \u0432\u044B \u0432 \u0431\u0435\u0437\u043E\u043F\u0430\u0441\u043D\u043E\u0441\u0442\u0438."
+  - image: {fileID: 2800000, guid: b5ce54c81b6c73d44a25723e36ce8338, type: 3}
+    title: "\u0412\u0435\u0440\u043D\u0438\u0442\u0435 \u0441\u0432\u0435\u0442"
+    body: "\u041F\u043E\u0434\u0431\u0435\u0440\u0438\u0442\u0435 \u043A\u043E\u0440\u043E\u0431\u043A\u0443 \u0441 \u043B\u0430\u043C\u043F\u043E\u0447\u043A\u0430\u043C\u0438. \u0417\u0430\u0436\u043C\u0438\u0442\u0435 \u041B\u041A\u041C, \u0447\u0442\u043E\u0431\u044B \u0432\u044B\u043A\u0440\u0443\u0442\u0438\u0442\u044C \u0440\u0430\u0437\u0431\u0438\u0442\u0443\u044E \u043B\u0430\u043C\u043F\u043E\u0447\u043A\u0443, \u0437\u0430\u0442\u0435\u043C \u0437\u0430\u0436\u043C\u0438\u0442\u0435 \u0435\u0449\u0451 \u0440\u0430\u0437, \u0447\u0442\u043E\u0431\u044B \u0432\u043A\u0440\u0443\u0442\u0438\u0442\u044C \u043D\u043E\u0432\u0443\u044E."
 --- !u!1 &1501000020
 GameObject:
   m_ObjectHideFlags: 0
@@ -13702,7 +13718,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733935466}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -14074,7 +14090,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1761458039}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
@@ -15975,7 +15991,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2066857201}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 13
   m_Type: 2
   m_Color: {r: 1, g: 0.79, b: 0.48, a: 1}
