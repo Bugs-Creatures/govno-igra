@@ -12,13 +12,23 @@ namespace UntilSix.Monster
 
         public bool IsInLight => IsLitAt(ZonePosition);
 
+        internal HashSet<CeilingLamp> CollectFixtures()
+        {
+            var fixtures = new HashSet<CeilingLamp>();
+            foreach (LampLightZone zone in zones)
+                if (zone != null && zone.Fixture != null)
+                    fixtures.Add(zone.Fixture);
+            return fixtures;
+        }
+
         public void FindBrokenLamps(HashSet<CeilingLamp> lamps)
         {
             lamps.Clear();
+            Vector3 position = ZonePosition;
             foreach (LampLightZone zone in zones)
             {
                 if (zone == null || zone.Fixture == null || !zone.Fixture.isActiveAndEnabled ||
-                    !zone.Fixture.IsBroken || !zone.ContainsPosition(transform.position))
+                    !zone.Fixture.IsBroken || !zone.ContainsPosition(position))
                     continue;
 
                 lamps.Add(zone.Fixture);

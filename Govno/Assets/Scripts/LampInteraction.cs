@@ -41,6 +41,8 @@ public sealed class LampInteraction : MonoBehaviour
     private static readonly int OutlineStencilWriteMaskId = Shader.PropertyToID("_OutlineStencilWriteMask");
     private static readonly int OutlineStencilCompareId = Shader.PropertyToID("_OutlineStencilCompare");
     private static readonly int OutlineStencilPassId = Shader.PropertyToID("_OutlineStencilPass");
+    private static readonly float[] RecoveryAngles = { 0f, -22.5f, 22.5f, -45f, 45f, -67.5f, 67.5f, -90f, 90f, -135f, 135f, 180f };
+    private static readonly float[] RecoveryDistances = { 3.25f, 2.8f, 2.4f, 1.9f, 1.35f, 0.9f };
     private readonly RaycastHit[] aimHits = new RaycastHit[8];
     private readonly HashSet<CeilingLamp> nearbyBrokenLamps = new();
     private readonly Dictionary<CeilingLamp, BrokenLampMarker> lampMarkers = new();
@@ -151,7 +153,7 @@ public sealed class LampInteraction : MonoBehaviour
         UpdateInteraction(targetCollider, aimedLamp, primary?.wasPressedThisFrame == true, primary?.isPressed == true, wantsToDrop);
         UpdateLampHints(aimRay, targetCollider, aimedLamp, canAim);
         if (heldItemCamera != null)
-            heldItemCamera.enabled = heldBox != null;
+            heldItemCamera.enabled = heldBox != null && !player.IsCinematicLocked;
     }
 
     private void UpdateInteraction(Collider targetCollider, CeilingLamp aimedLamp, bool primaryPressed,
@@ -173,8 +175,9 @@ public sealed class LampInteraction : MonoBehaviour
             door = targetCollider.GetComponentInParent<CottageDoor>();
             if (door != null && !door.isActiveAndEnabled)
                 door = null;
-            if (heldBox == null)
-                box = targetCollider.GetComponentInParent<BulbBox>();
+            box = targetCollider.GetComponentInParent<BulbBox>();
+            if (box != null && (!box.isActiveAndEnabled || box.IsHeld))
+                box = null;
         }
 
         CeilingLamp lamp = CanWorkOnLamp(aimedLamp) ? aimedLamp : null;
@@ -212,8 +215,12 @@ public sealed class LampInteraction : MonoBehaviour
         if (box != null)
         {
             SetOutline(null, null);
+            BulbBox oldBox = heldBox;
             heldBox = box;
             heldBox.PickUp(boxHoldPoint, heldItemLayer);
+            // The new box's collider is now clear of the old box's release path.
+            if (oldBox != null)
+                oldBox.Drop(playerCollider, throwStrength);
             reticle.Filled = restingReticleFilled;
         }
         else if (lamp != null)
@@ -419,50 +426,85 @@ public sealed class LampInteraction : MonoBehaviour
         repairProgress.Fade(completed);
     }
 
-    internal BulbBox BeginJumpscare()
+    internal void BeginJumpscare()
     {
         reticleWasEnabled = reticle.enabled;
         reticle.enabled = false;
-        return DropBox();
+        StopRepair(false);
+        SetOutline(null, null);
+        if (heldItemCamera != null)
+            heldItemCamera.enabled = false;
     }
 
     internal void RestoreReticle() => reticle.enabled = reticleWasEnabled;
 
-    internal void SpawnRecoveryBox()
+    internal BulbBox DropJumpscareBox()
     {
-        if (recoveryBoxPrefab == null)
-            return;
+        BulbBox carried = heldBox;
+        heldBox = null;
+        bool keepCarried = carried != null && (carried.HasBulbs || recoveryBoxPrefab == null);
+        BulbBox source = keepCarried ? carried : recoveryBoxPrefab;
+        if (source == null)
+            return null;
 
-        var shape = recoveryBoxPrefab.GetComponent<BoxCollider>();
-        Vector3 centerOffset = Vector3.Scale(shape.center, recoveryBoxPrefab.transform.localScale);
-        Vector3 size = Vector3.Scale(shape.size, recoveryBoxPrefab.transform.localScale);
+        if (!keepCarried && carried != null)
+            Destroy(carried.gameObject);
+
+        var shape = source.GetComponent<BoxCollider>();
+        Vector3 scale = keepCarried ? source.transform.lossyScale : source.transform.localScale;
+        Vector3 centerOffset = Vector3.Scale(shape.center, scale);
+        Vector3 size = Vector3.Scale(shape.size, scale);
         Vector3 halfSize = new(Mathf.Abs(size.x) * 0.5f, Mathf.Abs(size.y) * 0.5f, Mathf.Abs(size.z) * 0.5f);
         Quaternion rotation = transform.rotation;
+        Physics.SyncTransforms();
+        Vector3 position = FindRecoveryBoxCenter(halfSize, rotation) - rotation * centerOffset;
+        if (keepCarried)
+        {
+            carried.DropAt(playerCollider, position, rotation);
+            return carried;
+        }
+
+        BulbBox replacement = Instantiate(recoveryBoxPrefab, position, rotation);
+        Physics.IgnoreCollision(replacement.GetComponent<BoxCollider>(), playerCollider);
+        return replacement;
+    }
+
+    private Vector3 FindRecoveryBoxCenter(Vector3 halfSize, Quaternion rotation)
+    {
         Vector3 feet = playerCollider.bounds.center;
         feet.y = playerCollider.bounds.min.y;
         Vector3 origin = feet + Vector3.up * 0.65f;
-        for (int i = 0; i < 8; i++)
+        Vector3 eye = viewCamera.transform.position;
+        float verticalSlope = Mathf.Tan(viewCamera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        Vector3? firstSafeCenter = null;
+        foreach (float angle in RecoveryAngles)
         {
-            Vector3 direction = Quaternion.Euler(0f, (i + 0.5f) * 45f, 0f) * transform.forward;
-            Vector3 candidate = origin + direction * 0.95f;
-            if (!Physics.Raycast(candidate, Vector3.down, out RaycastHit floor, 2.5f,
-                    Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore) || floor.normal.y < 0.7f)
-                continue;
+            Vector3 direction = Quaternion.Euler(0f, angle, 0f) * transform.forward;
+            foreach (float distance in RecoveryDistances)
+            {
+                Vector3 candidate = origin + direction * distance;
+                if (!Physics.Raycast(candidate, Vector3.down, out RaycastHit floor, 2.5f,
+                        Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore) || floor.normal.y < 0.7f)
+                    continue;
 
-            Vector3 center = floor.point + Vector3.up * (halfSize.y + 0.03f);
-            Vector3 offset = center - origin;
-            if (FindAimCollider(new Ray(origin, offset.normalized), offset.magnitude) != null ||
-                Physics.CheckBox(center, halfSize, rotation, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-                continue;
+                Vector3 center = floor.point + Vector3.up * (halfSize.y + 0.03f);
+                Vector3 offset = center - origin;
+                if (FindAimCollider(new Ray(origin, offset.normalized), offset.magnitude) != null ||
+                    Physics.CheckBox(center, halfSize, rotation, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+                    continue;
 
-            Instantiate(recoveryBoxPrefab, center - rotation * centerOffset, rotation);
-            return;
+                firstSafeCenter ??= center;
+                Vector3 fromEye = center - eye;
+                float horizontalDistance = new Vector2(fromEye.x, fromEye.z).magnitude;
+                // The camera will be level, so leave some space below the box in the viewport.
+                if (fromEye.y < 0f && -fromEye.y <= horizontalDistance * verticalSlope * 0.88f &&
+                    FindAimCollider(new Ray(eye, fromEye.normalized), fromEye.magnitude) == null)
+                    return center;
+            }
         }
 
         // A narrow doorway may have room only underneath the player.
-        Vector3 fallback = feet + Vector3.up * (halfSize.y + 0.03f) - rotation * centerOffset;
-        var box = Instantiate(recoveryBoxPrefab, fallback, rotation);
-        Physics.IgnoreCollision(box.GetComponent<BoxCollider>(), playerCollider);
+        return firstSafeCenter ?? (feet + Vector3.up * (halfSize.y + 0.03f));
     }
 
     private BulbBox DropBox()

@@ -116,7 +116,25 @@ public sealed class BulbBox : MonoBehaviour
             * Quaternion.Euler(4f, 0f, tiltSide * UnityEngine.Random.Range(7f, 11f));
         Vector3 forward = player.forward;
         Vector3 releasePosition = GetReleasePosition(holder, rotation);
+        Release(holder, releasePosition, rotation);
 
+        float forwardSpeed = Mathf.Max(0f, Vector3.Dot(holder.velocity, forward));
+        body.linearVelocity = forward * ((3f + forwardSpeed) * Mathf.Max(0f, throwStrength))
+            + Vector3.up * ThrowLiftSpeed - player.right * 0.6f;
+        body.angularVelocity = rotation * new Vector3(0.16f, 0f, tiltSide * 0.22f);
+        inThrow = true;
+    }
+
+    internal void DropAt(CharacterController holder, Vector3 position, Quaternion rotation)
+    {
+        Release(holder, position, rotation);
+        body.linearVelocity = Vector3.zero;
+        body.angularVelocity = Vector3.zero;
+        inThrow = false;
+    }
+
+    private void Release(CharacterController holder, Vector3 releasePosition, Quaternion rotation)
+    {
         transform.SetParent(null, true);
         transform.SetPositionAndRotation(releasePosition, rotation);
         body.position = releasePosition;
@@ -132,11 +150,6 @@ public sealed class BulbBox : MonoBehaviour
         body.isKinematic = false;
         body.interpolation = dropInterpolation;
 
-        float forwardSpeed = Mathf.Max(0f, Vector3.Dot(holder.velocity, forward));
-        body.linearVelocity = forward * ((3f + forwardSpeed) * Mathf.Max(0f, throwStrength))
-            + Vector3.up * ThrowLiftSpeed - player.right * 0.6f;
-        body.angularVelocity = rotation * new Vector3(0.16f, 0f, tiltSide * 0.22f);
-        inThrow = true;
         IsHeld = false;
         if (lid != null)
             lid.localRotation = closedLidRotation;

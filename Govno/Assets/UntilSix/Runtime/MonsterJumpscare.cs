@@ -26,6 +26,7 @@ namespace UntilSix.Monster
         private NavMeshAgent agent;
         private MonsterLightPresentation presentation;
         private LampInteraction lampInteraction;
+        private NightClock nightClock;
         private AudioSource screamSource;
         private CanvasGroup blackout;
         private Coroutine sequence;
@@ -44,7 +45,10 @@ namespace UntilSix.Monster
             agent = GetComponent<NavMeshAgent>();
             presentation = GetComponent<MonsterLightPresentation>();
             if (player != null)
+            {
                 lampInteraction = player.GetComponent<LampInteraction>();
+                nightClock = player.GetComponent<NightClock>();
+            }
             if (neck != null)
                 head = neck.Find("head");
         }
@@ -69,18 +73,20 @@ namespace UntilSix.Monster
                 transform.rotation = Quaternion.LookRotation(towardsPlayer);
             presentation.SetJumpscareVisibility(true);
             player.SetCinematicLocked(true);
-            BulbBox droppedBox = lampInteraction != null ? lampInteraction.BeginJumpscare() : null;
-            bool needsRecoveryBox = droppedBox == null || !droppedBox.HasBulbs;
+            if (nightClock != null)
+                nightClock.OnJumpscare();
+            if (lampInteraction != null)
+                lampInteraction.BeginJumpscare();
             normalFieldOfView = player.ViewCamera.fieldOfView;
             zoomElapsed = 0f;
-            sequence = StartCoroutine(Play(teleportTargets, droppedBox, needsRecoveryBox));
+            sequence = StartCoroutine(Play(teleportTargets));
             return true;
         }
 
         private Vector3 NeckPosition => neck != null ? neck.position : transform.position + Vector3.up * 1.8f;
         private Vector3 FacePosition => head != null ? head.position + Vector3.up * 0.08f : NeckPosition + Vector3.up * 0.22f;
 
-        private IEnumerator Play(MonsterLampTarget[] teleportTargets, BulbBox droppedBox, bool needsRecoveryBox)
+        private IEnumerator Play(MonsterLampTarget[] teleportTargets)
         {
             if (screamSource == null)
             {
@@ -104,16 +110,19 @@ namespace UntilSix.Monster
 
             ShowBlackout();
             yield return Fade(0f, 1f, true);
-            if (needsRecoveryBox && lampInteraction != null)
-            {
-                if (droppedBox != null)
-                    Destroy(droppedBox.gameObject);
-                lampInteraction.SpawnRecoveryBox();
-            }
-
             player.ViewCamera.fieldOfView = normalFieldOfView;
             Teleport(teleportTargets);
             RestoreAgentPose();
+            Vector3 lookDirection = player.transform.forward;
+            BulbBox box = lampInteraction != null ? lampInteraction.DropJumpscareBox() : null;
+            if (box != null)
+            {
+                Vector3 center = box.transform.TransformPoint(box.GetComponent<BoxCollider>().center);
+                Vector3 towardsBox = Vector3.ProjectOnPlane(center - player.ViewPosition, Vector3.up);
+                if (towardsBox.sqrMagnitude > 0.01f)
+                    lookDirection = towardsBox;
+            }
+            player.TurnCinematicView(player.ViewPosition + lookDirection, 360f);
             resumeMonsterAt = Time.time + RecoveryDuration;
             presentation.SetJumpscareVisibility(false);
             yield return new WaitForSeconds(BlackoutDuration);

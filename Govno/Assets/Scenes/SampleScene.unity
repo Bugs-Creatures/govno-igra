@@ -2024,8 +2024,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2.9749994, y: 1.5500001, z: 2.2649994}
+    m_Center: {x: 0, y: 0, z: 0.16}
+    m_Extent: {x: 2.9749994, y: 1.5500001, z: 2.4249995}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -3542,8 +3542,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2.0225, y: 1.5500001, z: 1.1150002}
+    m_Center: {x: 0.175, y: 0, z: 0}
+    m_Extent: {x: 2.1975, y: 1.5500001, z: 1.1150002}
 --- !u!1 &547642794
 GameObject:
   m_ObjectHideFlags: 0
@@ -9126,6 +9126,7 @@ GameObject:
   - component: {fileID: 1740000005}
   - component: {fileID: 1501000016}
   - component: {fileID: 1501000017}
+  - component: {fileID: 1740000006}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -11051,6 +11052,24 @@ MonoBehaviour:
   - {fileID: 262811764}
   - {fileID: 1788706859}
   - {fileID: 1912864941}
+--- !u!114 &1740000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1501000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb7a1232d3f13844b2d517c327c5b10, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::NightClock
+  hud: {fileID: 1501000022}
+  secondsPerHour: 30
+  darknessGraceSeconds: 5
+  lightResetSeconds: 5
+  rewindSpeed: 0.5
+  brokenLampStopThreshold: 4
 --- !u!1001 &1743285827
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12835,8 +12854,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2.0225, y: 1.5500001, z: 1.1349998}
+    m_Center: {x: 0.175, y: 0, z: 0}
+    m_Extent: {x: 2.1975, y: 1.5500001, z: 1.1349998}
 --- !u!1 &2066857201
 GameObject:
   m_ObjectHideFlags: 0
@@ -14275,8 +14294,8 @@ MonoBehaviour:
   height: 3
   useBox: 1
   box:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 2.9749994, y: 1.5499998, z: 2.5849996}
+    m_Center: {x: 0, y: 0, z: -0.15}
+    m_Extent: {x: 2.9749994, y: 1.5499998, z: 2.7349997}
 --- !u!1001 &2144821349
 PrefabInstance:
   m_ObjectHideFlags: 0
